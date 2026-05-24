@@ -1,21 +1,32 @@
-'use client'
 import { Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { rooms } from '@/constants/roomData'
+import { notFound } from 'next/navigation'
+import { getRoomBySlugFromSupabase, getRoomsFromSupabase } from '@/lib/supabase/rooms'
 import BookingForm from '@/components/booking/BookingForm'
 
-function BookingContent() {
-  const searchParams = useSearchParams()
-  const roomId = searchParams.get('roomId')
-  const checkIn = searchParams.get('checkIn') ?? ''
-  const checkOut = searchParams.get('checkOut') ?? ''
-  const adults = parseInt(searchParams.get('adults') ?? '1')
-  const children = parseInt(searchParams.get('children') ?? '0')
+interface BookingPageProps {
+  searchParams: Promise<{
+    roomId?: string
+    checkIn?: string
+    checkOut?: string
+    adults?: string
+    children?: string
+  }>
+}
 
-  const room = rooms.find((r) => r.id === roomId)
-  if (!room) return <div>Room not found</div>
+export default async function BookingPage({ searchParams }: BookingPageProps) {
+  const params = await searchParams
+  const roomId = params.roomId ?? ''
+  const checkIn = params.checkIn ?? ''
+  const checkOut = params.checkOut ?? ''
+  const adults = parseInt(params.adults ?? '1')
+  const children = parseInt(params.children ?? '0')
 
-  // Calculate nights if dates provided
+  // Find room by ID from Supabase
+  const allRooms = await getRoomsFromSupabase()
+  const room = allRooms.find(r => r.id === roomId)
+
+  if (!room) notFound()
+
   let nights = 0
   if (checkIn && checkOut) {
     const diff = new Date(checkOut).getTime() - new Date(checkIn).getTime()
@@ -23,25 +34,19 @@ function BookingContent() {
   }
 
   return (
-    <BookingForm
-      room={{
-        id: room.id,
-        name: room.name,
-        slug: room.slug,
-        images: room.images || [],
-        pricePerNight: room.pricePerNight,
-        bedType: room.bedType,
-        capacity: room.capacity,
-      }}
-      initialDates={{ checkIn, checkOut, nights, adults, children }}
-    />
-  )
-}
-
-export default function BookingPage() {
-  return (
     <Suspense fallback={<div>Loading...</div>}>
-      <BookingContent />
+      <BookingForm
+        room={{
+          id: room.id,
+          name: room.name,
+          slug: room.slug,
+          images: room.images || [],
+          pricePerNight: room.pricePerNight,
+          bedType: room.bedType,
+          capacity: room.capacity,
+        }}
+        initialDates={{ checkIn, checkOut, nights, adults, children }}
+      />
     </Suspense>
   )
 }
