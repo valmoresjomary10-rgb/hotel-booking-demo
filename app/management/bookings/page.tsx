@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { createAdminClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { BookingStatus } from '@/types/booking'
 
 type SupabaseBooking = {
@@ -37,7 +37,7 @@ export default async function ManageBookingsPage() {
     .select('*')
     .order('created_at', { ascending: false })
 
-  if (error) console.error('Bookings fetch error:', error)
+if (error) console.error('Bookings fetch error:', error)
 
   const all = bookings ?? []
 
