@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Save, Hotel, Home, Users, Search } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 const TABS = [
   { id: 'hotel', label: 'Hotel Info', icon: Hotel },
@@ -44,13 +45,13 @@ const defaultContent = {
   },
   seo: {
     homeTitle: 'Hotel Lumière — Where Luxury Meets Serenity',
-    homeDescription: 'Experience unparalleled luxury at Hotel Lumière, Manila\'s premier boutique hotel. Book your stay today.',
+    homeDescription: "Experience unparalleled luxury at Hotel Lumière, Manila's premier boutique hotel. Book your stay today.",
     roomsTitle: 'Rooms & Suites — Hotel Lumière',
     roomsDescription: 'Explore our collection of luxury rooms and suites, each designed for the discerning traveler.',
     aboutTitle: 'About Us — Hotel Lumière',
-    aboutDescription: 'Learn about the story, vision, and team behind Hotel Lumière, Manila\'s finest luxury hotel.',
+    aboutDescription: "Learn about the story, vision, and team behind Hotel Lumière, Manila's finest luxury hotel.",
     contactTitle: 'Contact Us — Hotel Lumière',
-    contactDescription: 'Get in touch with Hotel Lumière. We\'re here to help with reservations and inquiries.',
+    contactDescription: "Get in touch with Hotel Lumière. We're here to help with reservations and inquiries.",
   },
 }
 
@@ -80,39 +81,67 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
 export default function ContentPage() {
   const [content, setContent] = useState<ContentData>(defaultContent)
   const [activeTab, setActiveTab] = useState('hotel')
+  const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const stored = localStorage.getItem('lum_content')
-    if (stored) setContent(JSON.parse(stored))
+    const fetchContent = async () => {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('content')
+        .eq('id', 'main')
+        .single()
+      if (!error && data) setContent(data.content as ContentData)
+      setLoading(false)
+    }
+    fetchContent()
   }, [])
 
   const update = (section: keyof ContentData, key: string, value: string) => {
     setContent(c => ({ ...c, [section]: { ...c[section], [key]: value } }))
   }
 
-  const handleSave = () => {
-    localStorage.setItem('lum_content', JSON.stringify(content))
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+  const handleSave = async () => {
+    setSaving(true)
+    const supabase = createClient()
+    const { error } = await supabase
+      .from('site_content')
+      .update({ content, updated_at: new Date().toISOString() })
+      .eq('id', 'main')
+    if (!error) {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    }
+    setSaving(false)
+  }
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl">
+        <div className="h-8 w-48 bg-cream-100 animate-pulse mb-8" />
+        <div className="bg-white border border-cream-200 p-6 space-y-4">
+          {[...Array(5)].map((_, i) => <div key={i} className="h-10 bg-cream-100 animate-pulse" />)}
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="max-w-3xl">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="font-accent text-[10px] uppercase tracking-widest text-gold-500 mb-1">Management</p>
           <h2 className="font-display text-3xl text-charcoal-900">Content</h2>
         </div>
-        <button onClick={handleSave}
-          className="flex items-center gap-2 bg-gold-500 hover:bg-gold-600 text-charcoal-900 font-accent text-[9px] uppercase tracking-widest px-5 py-2.5 transition-colors">
+        <button onClick={handleSave} disabled={saving}
+          className="flex items-center gap-2 bg-gold-500 hover:bg-gold-600 disabled:opacity-50 text-charcoal-900 font-accent text-[9px] uppercase tracking-widest px-5 py-2.5 transition-colors">
           <Save size={13} />
-          {saved ? 'Saved!' : 'Save Changes'}
+          {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Changes'}
         </button>
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-1 mb-8">
         {TABS.map(tab => {
           const Icon = tab.icon
@@ -130,7 +159,6 @@ export default function ContentPage() {
         })}
       </div>
 
-      {/* Hotel Info */}
       {activeTab === 'hotel' && (
         <div className="bg-white border border-cream-200 p-6 space-y-4">
           <SectionHeading>General</SectionHeading>
@@ -151,7 +179,6 @@ export default function ContentPage() {
         </div>
       )}
 
-      {/* Homepage */}
       {activeTab === 'homepage' && (
         <div className="bg-white border border-cream-200 p-6 space-y-4">
           <SectionHeading>Hero Section</SectionHeading>
@@ -168,7 +195,6 @@ export default function ContentPage() {
         </div>
       )}
 
-      {/* About */}
       {activeTab === 'about' && (
         <div className="bg-white border border-cream-200 p-6 space-y-4">
           <SectionHeading>Hero</SectionHeading>
@@ -185,7 +211,6 @@ export default function ContentPage() {
         </div>
       )}
 
-      {/* SEO */}
       {activeTab === 'seo' && (
         <div className="bg-white border border-cream-200 p-6 space-y-4">
           <SectionHeading>Home Page</SectionHeading>
