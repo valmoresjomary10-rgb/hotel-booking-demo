@@ -20,7 +20,8 @@ interface BookingRoomSummaryProps {
 function formatDate(dateStr: string) {
   if (!dateStr) return '—'
   try {
-    return format(new Date(dateStr), 'EEE, MMM d, yyyy')
+    const [y,m,d] = dateStr.split("-").map(Number)
+    return format(new Date(y, m-1, d), "EEE, MMM d, yyyy")
   } catch {
     return dateStr
   }
