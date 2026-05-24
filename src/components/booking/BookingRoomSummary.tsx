@@ -39,10 +39,10 @@ export default function BookingRoomSummary({
   children,
 }: BookingRoomSummaryProps) {
   return (
-    <div className="border border-charcoal-700 rounded-sm overflow-hidden">
+    <div className="border border-cream-200 rounded-sm overflow-hidden">
       {/* Room image */}
       {roomImage ? (
-        <div className="relative h-40 w-full bg-charcoal-800">
+        <div className="relative h-40 w-full bg-charcoal-900">
           <Image
             src={roomImage}
             alt={roomName}
@@ -53,8 +53,8 @@ export default function BookingRoomSummary({
           <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
         </div>
       ) : (
-        <div className="h-40 w-full bg-charcoal-800 flex items-center justify-center">
-          <BedDouble className="h-10 w-10 text-charcoal-700" />
+        <div className="h-40 w-full bg-charcoal-900 flex items-center justify-center">
+          <BedDouble className="h-10 w-10 text-charcoal-700/50" />
         </div>
       )}
 
@@ -64,13 +64,13 @@ export default function BookingRoomSummary({
           <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-1">
             Your Room
           </p>
-          <h3 className="font-display text-xl text-cream-100">{roomName}</h3>
+          <h3 className="font-display text-xl text-charcoal-900">{roomName}</h3>
           <div className="flex items-center gap-4 mt-2">
-            <span className="flex items-center gap-1.5 text-xs text-cream-200/60 font-body">
+            <span className="flex items-center gap-1.5 text-xs text-charcoal-700/60 font-body">
               <BedDouble className="h-3.5 w-3.5" />
               {bedType.charAt(0).toUpperCase() + bedType.slice(1)} Bed
             </span>
-            <span className="flex items-center gap-1.5 text-xs text-cream-200/60 font-body">
+            <span className="flex items-center gap-1.5 text-xs text-charcoal-700/60 font-body">
               <Users className="h-3.5 w-3.5" />
               Up to {capacity} guests
             </span>
@@ -78,23 +78,23 @@ export default function BookingRoomSummary({
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-charcoal-700" />
+        <div className="h-px bg-cream-200" />
 
         {/* Dates */}
         <div className="space-y-3">
           <div className="flex justify-between items-start">
-            <span className="text-xs tracking-widest uppercase font-accent text-charcoal-700">
+            <span className="text-xs tracking-widest uppercase font-accent text-charcoal-700/50">
               Check-In
             </span>
-            <span className="text-sm text-cream-100 font-body text-right">
+            <span className="text-sm text-charcoal-900 font-body text-right">
               {formatDate(checkIn)}
             </span>
           </div>
           <div className="flex justify-between items-start">
-            <span className="text-xs tracking-widest uppercase font-accent text-charcoal-700">
+            <span className="text-xs tracking-widest uppercase font-accent text-charcoal-700/50">
               Check-Out
             </span>
-            <span className="text-sm text-cream-100 font-body text-right">
+            <span className="text-sm text-charcoal-900 font-body text-right">
               {formatDate(checkOut)}
             </span>
           </div>
@@ -109,14 +109,14 @@ export default function BookingRoomSummary({
         </div>
 
         {/* Divider */}
-        <div className="h-px bg-charcoal-700" />
+        <div className="h-px bg-cream-200" />
 
         {/* Guests */}
         <div className="flex justify-between">
-          <span className="text-xs tracking-widest uppercase font-accent text-charcoal-700">
+          <span className="text-xs tracking-widest uppercase font-accent text-charcoal-700/50">
             Guests
           </span>
-          <span className="text-sm text-cream-100 font-body">
+          <span className="text-sm text-charcoal-900 font-body">
             {adults} {adults === 1 ? 'Adult' : 'Adults'}
             {children > 0 && `, ${children} ${children === 1 ? 'Child' : 'Children'}`}
           </span>
