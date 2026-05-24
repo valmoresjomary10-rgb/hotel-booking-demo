@@ -12,6 +12,7 @@ import BookingPriceSummary from './BookingPriceSummary'
 import type { GuestInfo } from '@/types/booking'
 
 interface BookingFormProps {
+  initialDates?: { checkIn: string; checkOut: string; nights: number; adults: number; children: number }
   room: {
     id: string
     name: string
@@ -23,11 +24,17 @@ interface BookingFormProps {
   }
 }
 
-export default function BookingForm({ room }: BookingFormProps) {
+export default function BookingForm({ room, initialDates }: BookingFormProps) {
   const router = useRouter()
 
   const { state, totalPrice, setDates, setGuests, setGuestInfo, goToStep } = useBooking({
     roomId: room.id,
+    checkIn: initialDates?.checkIn ?? '',
+    checkOut: initialDates?.checkOut ?? '',
+    nights: initialDates?.nights ?? 0,
+    adults: initialDates?.adults ?? 1,
+    children: initialDates?.children ?? 0,
+    step: (initialDates?.nights ?? 0) > 0 ? 2 : 1,
     roomName: room.name,
     roomSlug: room.slug,
     roomImage: room.images?.[0] || '',

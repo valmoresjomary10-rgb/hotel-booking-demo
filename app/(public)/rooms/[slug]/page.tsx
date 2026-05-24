@@ -132,7 +132,7 @@ export default async function RoomDetailPage({ params }: { params: Promise<{ slu
                     </select>
                   </div>
                 </div>
-                <Link href={`/booking?roomId=${room.id}`}>
+                <Link href={`/booking?roomId=${room.id}`} id="reserve-link">
                   <Button variant="primary" size="lg" className="w-full">
                     Reserve Now
                   </Button>
