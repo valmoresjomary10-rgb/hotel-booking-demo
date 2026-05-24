@@ -1,17 +1,20 @@
 import { notFound } from 'next/navigation'
-import { getRoomBySlug, rooms } from '@/constants/roomData'
+import { getRoomsFromSupabase, getRoomBySlugFromSupabase } from '@/lib/supabase/rooms'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import Divider from '@/components/ui/Divider'
 import RoomBookingCard from '@/components/rooms/RoomBookingCard'
 
+export const revalidate = 60
+
 export async function generateStaticParams() {
+  const rooms = await getRoomsFromSupabase()
   return rooms.map(room => ({ slug: room.slug }))
 }
 
 export default async function RoomDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const room = getRoomBySlug(slug)
+  const room = await getRoomBySlugFromSupabase(slug)
   if (!room) notFound()
 
   return (
@@ -76,7 +79,6 @@ export default async function RoomDetailPage({ params }: { params: Promise<{ slu
                 </div>
               </div>
             </div>
-
             <div className="lg:col-span-1">
               <RoomBookingCard
                 roomId={room.id}
