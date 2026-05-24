@@ -1,7 +1,6 @@
-// src/app/(public)/booking/confirmation/page.tsx
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { createServerClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import BookingConfirmationCard from '@/components/booking/BookingConfirmationCard'
 import { siteConfig } from '@/constants/siteConfig'
 
@@ -11,18 +10,18 @@ export const metadata: Metadata = {
 }
 
 interface ConfirmationPageProps {
-  searchParams: { code?: string }
+  searchParams: Promise<{ code?: string }>
 }
 
 export default async function BookingConfirmationPage({ searchParams }: ConfirmationPageProps) {
-  if (!searchParams.code) notFound()
+  const { code } = await searchParams
+  if (!code) notFound()
 
-  const supabase = createServerClient()
-
+  const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('bookings')
-    .select('*, rooms(name)')
-    .eq('confirmation_code', searchParams.code.toUpperCase())
+    .select('*')
+    .eq('confirmation_code', code.toUpperCase())
     .single()
 
   if (error || !data) notFound()
@@ -30,14 +29,14 @@ export default async function BookingConfirmationPage({ searchParams }: Confirma
   return (
     <BookingConfirmationCard
       confirmationCode={data.confirmation_code}
-      roomName={data.rooms?.name ?? 'Your Room'}
+      roomName={data.room_name ?? 'Your Room'}
       checkIn={data.check_in}
       checkOut={data.check_out}
       nights={data.nights}
       adults={data.adults}
       children={data.children}
-      guestName={`${data.first_name} ${data.last_name}`}
-      email={data.email}
+      guestName={`${data.guest_first_name} ${data.guest_last_name}`}
+      email={data.guest_email}
       totalPrice={data.total_price}
     />
   )
