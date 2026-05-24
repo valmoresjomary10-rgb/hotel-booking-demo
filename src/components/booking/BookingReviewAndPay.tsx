@@ -59,7 +59,7 @@ export default function BookingReviewAndPay({
     try {
       await onConfirm()
     } catch (err) {
-      setError('Something went wrong. Please try again.')
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }

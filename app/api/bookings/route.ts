@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       .from('bookings')
       .insert([{
         confirmation_code: confirmationCode,
-        room_id: body.roomId ?? null,
+        room_id: null,
         room_name: body.roomName,
         price_per_night: body.pricePerNight,
         guest_first_name: body.guest.firstName,
