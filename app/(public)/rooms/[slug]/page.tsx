@@ -9,8 +9,9 @@ export async function generateStaticParams() {
   return rooms.map(room => ({ slug: room.slug }))
 }
 
-export default function RoomDetailPage({ params }: { params: { slug: string } }) {
-  const room = getRoomBySlug(params.slug)
+export default async function RoomDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const room = getRoomBySlug(slug)
   if (!room) notFound()
 
   return (
@@ -52,14 +53,12 @@ export default function RoomDetailPage({ params }: { params: { slug: string } })
 
             {/* Left — Details */}
             <div className="lg:col-span-2 space-y-10">
-              {/* Description */}
               <div>
                 <h2 className="font-display text-charcoal-900 text-2xl font-light mb-4">About This Room</h2>
                 <Divider ornamental className="mb-6" />
                 <p className="font-body text-charcoal-700 leading-relaxed">{room.description}</p>
               </div>
 
-              {/* Room Details */}
               <div>
                 <h2 className="font-display text-charcoal-900 text-2xl font-light mb-6">Room Details</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -77,7 +76,6 @@ export default function RoomDetailPage({ params }: { params: { slug: string } })
                 </div>
               </div>
 
-              {/* Amenities */}
               <div>
                 <h2 className="font-display text-charcoal-900 text-2xl font-light mb-6">Amenities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -134,7 +132,7 @@ export default function RoomDetailPage({ params }: { params: { slug: string } })
                     </select>
                   </div>
                 </div>
-                <Link href="/booking">
+                <Link href={`/booking?roomId=${room.id}`}>
                   <Button variant="primary" size="lg" className="w-full">
                     Reserve Now
                   </Button>
