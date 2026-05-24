@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const supabase = await createClient()
+    const supabase = createAdminClient()
 
     const confirmationCode = Math.random().toString(36).substring(2, 10).toUpperCase()
 
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
-  const supabase = await createClient()
+  const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('bookings')
     .select('*')

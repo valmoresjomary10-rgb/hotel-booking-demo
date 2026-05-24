@@ -67,9 +67,11 @@ export default function BookingForm({ room }: BookingFormProps) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         roomId: state.roomId,
+        roomName: state.roomName,
         checkIn: state.checkIn,
         checkOut: state.checkOut,
         adults: state.adults,
+        nights: state.nights,
         children: state.children,
         pricePerNight: state.pricePerNight,
         totalPrice: grandTotal,
@@ -123,7 +125,8 @@ export default function BookingForm({ room }: BookingFormProps) {
                     checkIn: state.checkIn,
                     checkOut: state.checkOut,
                     adults: state.adults,
-                    children: state.children,
+                    nights: state.nights,
+        children: state.children,
                   }}
                   onSubmit={handleDatesSubmit}
                 />
