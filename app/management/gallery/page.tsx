@@ -2,65 +2,104 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Upload, Trash2, X, ImageIcon } from 'lucide-react'
-import { mockGalleryImages, galleryCategories, GalleryImage, GalleryCategory } from '@/constants/galleryData'
+import { galleryCategories, GalleryCategory } from '@/constants/galleryData'
+import { createClient } from '@/lib/supabase/client'
+
+interface GalleryImage {
+  id: string
+  url: string
+  name: string
+  category: GalleryCategory
+  uploaded_at: string
+}
 
 export default function GalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<GalleryCategory | 'all'>('all')
   const [deleteTarget, setDeleteTarget] = useState<GalleryImage | null>(null)
-  const [uploadPreview, setUploadPreview] = useState<{ url: string; name: string; category: GalleryCategory } | null>(null)
+  const [uploadPreview, setUploadPreview] = useState<{ file: File; url: string; name: string; category: GalleryCategory } | null>(null)
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => {
-    const stored = localStorage.getItem('lum_gallery')
-    setImages(stored ? JSON.parse(stored) : mockGalleryImages)
-  }, [])
+  useEffect(() => { fetchImages() }, [])
 
-  const save = (updated: GalleryImage[]) => {
-    setImages(updated)
-    localStorage.setItem('lum_gallery', JSON.stringify(updated))
+  const fetchImages = async () => {
+    setLoading(true)
+    setError(null)
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('gallery_images')
+      .select('*')
+      .order('uploaded_at', { ascending: false })
+    console.log('Gallery fetch result:', { data, error })
+    if (error) {
+      setError(error.message)
+    } else if (data) {
+      setImages(data)
+    }
+    setLoading(false)
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      setUploadPreview({ url: reader.result as string, name: file.name.replace(/\.[^/.]+$/, ''), category: 'gallery' })
-    }
-    reader.readAsDataURL(file)
+    const url = URL.createObjectURL(file)
+    setUploadPreview({ file, url, name: file.name.replace(/\.[^/.]+$/, ''), category: 'gallery' })
     e.target.value = ''
   }
 
-  const handleUploadConfirm = () => {
+  const handleUploadConfirm = async () => {
     if (!uploadPreview) return
     setUploading(true)
-    const newImage: GalleryImage = {
-      id: `g${Date.now()}`,
-      url: uploadPreview.url,
-      name: uploadPreview.name,
-      category: uploadPreview.category,
-      uploadedAt: new Date().toISOString().split('T')[0],
-    }
-    setTimeout(() => {
-      save([newImage, ...images])
+    try {
+      const supabase = createClient()
+      const ext = uploadPreview.file.name.split('.').pop()
+      const filePath = `${Date.now()}.${ext}`
+      const { error: storageError } = await supabase.storage
+        .from('gallery')
+        .upload(filePath, uploadPreview.file)
+      if (storageError) throw storageError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('gallery')
+        .getPublicUrl(filePath)
+
+      const { error: dbError } = await supabase
+        .from('gallery_images')
+        .insert({ name: uploadPreview.name, url: publicUrl, category: uploadPreview.category })
+      if (dbError) throw dbError
+
+      await fetchImages()
       setUploadPreview(null)
+    } catch (err) {
+      console.error('Upload failed:', err)
+    } finally {
       setUploading(false)
-    }, 400)
+    }
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleteTarget) return
-    save(images.filter(img => img.id !== deleteTarget.id))
-    setDeleteTarget(null)
+    try {
+      const supabase = createClient()
+      const urlParts = deleteTarget.url.split('/gallery/')
+      if (urlParts[1]) {
+        await supabase.storage.from('gallery').remove([urlParts[1]])
+      }
+      await supabase.from('gallery_images').delete().eq('id', deleteTarget.id)
+      await fetchImages()
+      setDeleteTarget(null)
+    } catch (err) {
+      console.error('Delete failed:', err)
+    }
   }
 
   const filtered = activeCategory === 'all' ? images : images.filter(img => img.category === activeCategory)
 
   return (
     <>
-      {/* Upload Modal */}
       {uploadPreview && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-charcoal-900/40 backdrop-blur-sm" onClick={() => setUploadPreview(null)} />
@@ -101,7 +140,6 @@ export default function GalleryPage() {
         </div>
       )}
 
-      {/* Delete Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-charcoal-900/40 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
@@ -131,7 +169,6 @@ export default function GalleryPage() {
 
       <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
 
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="font-accent text-[10px] uppercase tracking-widest text-gold-500 mb-1">Management</p>
@@ -144,7 +181,6 @@ export default function GalleryPage() {
         </button>
       </div>
 
-      {/* Category Tabs */}
       <div className="flex gap-1 mb-6">
         {galleryCategories.map(cat => (
           <button key={cat.value} onClick={() => setActiveCategory(cat.value)}
@@ -158,8 +194,19 @@ export default function GalleryPage() {
         ))}
       </div>
 
-      {/* Grid */}
-      {filtered.length === 0 ? (
+      {error && (
+        <div className="bg-red-50 border border-red-200 p-4 mb-6 text-red-600 font-body text-sm">
+          Error: {error}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="bg-cream-100 border border-cream-200 h-64 animate-pulse" />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="bg-white border border-cream-200 p-16 text-center">
           <ImageIcon size={32} className="text-charcoal-700/20 mx-auto mb-3" />
           <p className="font-body text-sm text-charcoal-700/40">No images in this category yet.</p>
