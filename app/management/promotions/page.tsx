@@ -2,59 +2,77 @@
 
 import { useState, useEffect } from 'react'
 import { Plus, Pencil, Trash2, X, Tag } from 'lucide-react'
-import { offers as mockOffers } from '@/constants/offersData'
-import { Offer } from '@/types/offer'
+import { createClient } from '@/lib/supabase/client'
 
 const CATEGORIES = ['Romance', 'Wellness', 'Experience', 'Value', 'Family', 'Seasonal']
 const BADGES = ['', 'Most Popular', 'New', 'Best Value', 'Limited']
 
-const empty: Partial<Offer> = {
-  title: '', tagline: '', description: '', category: 'Romance',
-  badge: null, discount: 0, originalPrice: 0, packagePrice: 0,
-  validFrom: '', validUntil: '', featured: false, inclusions: [], terms: '', slug: '',
+interface Promotion {
+  id: string
+  slug: string
+  title: string
+  tagline: string
+  description: string
+  long_description: string
+  category: string
+  badge: string | null
+  discount: number
+  original_price: number
+  package_price: number
+  valid_from: string
+  valid_until: string
+  featured: boolean
+  inclusions: string[]
+  terms: string
+}
+
+const empty: Partial<Promotion> = {
+  title: '', tagline: '', description: '', long_description: '', category: 'Romance',
+  badge: null, discount: 0, original_price: 0, package_price: 0,
+  valid_from: '', valid_until: '', featured: false, inclusions: [], terms: '', slug: '',
 }
 
 export default function PromotionsPage() {
-  const [promotions, setPromotions] = useState<Offer[]>([])
-  const [modal, setModal] = useState<{ mode: 'add' | 'edit'; data: Partial<Offer> } | null>(null)
-  const [deleteTarget, setDeleteTarget] = useState<Offer | null>(null)
+  const [promotions, setPromotions] = useState<Promotion[]>([])
+  const [loading, setLoading] = useState(true)
+  const [modal, setModal] = useState<{ mode: 'add' | 'edit'; data: Partial<Promotion> } | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<Promotion | null>(null)
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    const stored = localStorage.getItem('lum_promotions')
-    setPromotions(stored ? JSON.parse(stored) : mockOffers)
-  }, [])
+  useEffect(() => { fetchPromotions() }, [])
 
-  const save = (updated: Offer[]) => {
-    setPromotions(updated)
-    localStorage.setItem('lum_promotions', JSON.stringify(updated))
+  const fetchPromotions = async () => {
+    setLoading(true)
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('promotions')
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (!error && data) setPromotions(data)
+    setLoading(false)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!modal) return
     setSaving(true)
-    setTimeout(() => {
-      if (modal.mode === 'add') {
-        const newOffer: Offer = {
-          ...empty,
-          ...modal.data,
-          id: `promo-${Date.now()}`,
-          slug: modal.data.title?.toLowerCase().replace(/\s+/g, '-') ?? `promo-${Date.now()}`,
-          longDescription: modal.data.description ?? '',
-          inclusions: modal.data.inclusions ?? [],
-        } as Offer
-        save([newOffer, ...promotions])
-      } else {
-        save(promotions.map(p => p.id === modal.data.id ? { ...p, ...modal.data } as Offer : p))
-      }
-      setModal(null)
-      setSaving(false)
-    }, 400)
+    const supabase = createClient()
+    const slug = modal.data.title?.toLowerCase().replace(/\s+/g, '-') ?? `promo-${Date.now()}`
+
+    if (modal.mode === 'add') {
+      await supabase.from('promotions').insert({ ...empty, ...modal.data, slug })
+    } else {
+      await supabase.from('promotions').update({ ...modal.data, slug }).eq('id', modal.data.id!)
+    }
+    await fetchPromotions()
+    setModal(null)
+    setSaving(false)
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleteTarget) return
-    save(promotions.filter(p => p.id !== deleteTarget.id))
+    const supabase = createClient()
+    await supabase.from('promotions').delete().eq('id', deleteTarget.id)
+    await fetchPromotions()
     setDeleteTarget(null)
   }
 
@@ -62,25 +80,22 @@ export default function PromotionsPage() {
     setModal(m => m ? { ...m, data: { ...m.data, [key]: value } } : m)
   }
 
-  const statusColor = (offer: Offer) => {
-    const now = new Date()
-    const until = new Date(offer.validUntil)
-    if (until < now) return 'text-charcoal-700/30 bg-cream-100'
-    if (offer.featured) return 'text-gold-500 bg-gold-50'
+  const statusColor = (p: Promotion) => {
+    const expired = p.valid_until && new Date(p.valid_until) < new Date()
+    if (expired) return 'text-charcoal-700/30 bg-cream-100'
+    if (p.featured) return 'text-gold-500 bg-gold-50'
     return 'text-emerald-600 bg-emerald-50'
   }
 
-  const statusLabel = (offer: Offer) => {
-    const now = new Date()
-    const until = new Date(offer.validUntil)
-    if (until < now) return 'Expired'
-    if (offer.featured) return 'Featured'
+  const statusLabel = (p: Promotion) => {
+    const expired = p.valid_until && new Date(p.valid_until) < new Date()
+    if (expired) return 'Expired'
+    if (p.featured) return 'Featured'
     return 'Active'
   }
 
   return (
     <>
-      {/* Add / Edit Modal */}
       {modal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-charcoal-900/40 backdrop-blur-sm" onClick={() => setModal(null)} />
@@ -96,10 +111,7 @@ export default function PromotionsPage() {
             </h3>
 
             <div className="space-y-4">
-              {[
-                { label: 'Title', key: 'title' },
-                { label: 'Tagline', key: 'tagline' },
-              ].map(f => (
+              {[{ label: 'Title', key: 'title' }, { label: 'Tagline', key: 'tagline' }].map(f => (
                 <div key={f.key}>
                   <label className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/40 block mb-1">{f.label}</label>
                   <input value={(modal.data as Record<string, unknown>)[f.key] as string ?? ''}
@@ -134,12 +146,12 @@ export default function PromotionsPage() {
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/40 block mb-1">Original Price (₱)</label>
-                  <input type="number" value={modal.data.originalPrice ?? 0} onChange={e => update('originalPrice', Number(e.target.value))}
+                  <input type="number" value={modal.data.original_price ?? 0} onChange={e => update('original_price', Number(e.target.value))}
                     className="w-full border border-cream-200 px-3 py-2 font-body text-sm focus:outline-none focus:border-gold-400/50" />
                 </div>
                 <div>
                   <label className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/40 block mb-1">Package Price (₱)</label>
-                  <input type="number" value={modal.data.packagePrice ?? 0} onChange={e => update('packagePrice', Number(e.target.value))}
+                  <input type="number" value={modal.data.package_price ?? 0} onChange={e => update('package_price', Number(e.target.value))}
                     className="w-full border border-cream-200 px-3 py-2 font-body text-sm focus:outline-none focus:border-gold-400/50" />
                 </div>
                 <div>
@@ -152,12 +164,12 @@ export default function PromotionsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/40 block mb-1">Valid From</label>
-                  <input type="date" value={modal.data.validFrom ?? ''} onChange={e => update('validFrom', e.target.value)}
+                  <input type="date" value={modal.data.valid_from ?? ''} onChange={e => update('valid_from', e.target.value)}
                     className="w-full border border-cream-200 px-3 py-2 font-body text-sm focus:outline-none focus:border-gold-400/50" />
                 </div>
                 <div>
                   <label className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/40 block mb-1">Valid Until</label>
-                  <input type="date" value={modal.data.validUntil ?? ''} onChange={e => update('validUntil', e.target.value)}
+                  <input type="date" value={modal.data.valid_until ?? ''} onChange={e => update('valid_until', e.target.value)}
                     className="w-full border border-cream-200 px-3 py-2 font-body text-sm focus:outline-none focus:border-gold-400/50" />
                 </div>
               </div>
@@ -170,8 +182,7 @@ export default function PromotionsPage() {
 
               <div className="flex items-center gap-3">
                 <input type="checkbox" id="featured" checked={modal.data.featured ?? false}
-                  onChange={e => update('featured', e.target.checked)}
-                  className="accent-gold-500" />
+                  onChange={e => update('featured', e.target.checked)} className="accent-gold-500" />
                 <label htmlFor="featured" className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/60">Mark as Featured</label>
               </div>
             </div>
@@ -190,7 +201,6 @@ export default function PromotionsPage() {
         </div>
       )}
 
-      {/* Delete Modal */}
       {deleteTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-charcoal-900/40 backdrop-blur-sm" onClick={() => setDeleteTarget(null)} />
@@ -217,7 +227,6 @@ export default function PromotionsPage() {
         </div>
       )}
 
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <p className="font-accent text-[10px] uppercase tracking-widest text-gold-500 mb-1">Management</p>
@@ -230,14 +239,17 @@ export default function PromotionsPage() {
         </button>
       </div>
 
-      {/* Table */}
       <div className="bg-white border border-cream-200">
         <div className="grid grid-cols-[1fr_auto_auto_auto_auto_auto] gap-4 px-6 py-3 border-b border-cream-200">
           {['Title', 'Category', 'Price', 'Valid Until', 'Status', ''].map(h => (
             <p key={h} className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/40">{h}</p>
           ))}
         </div>
-        {promotions.length === 0 ? (
+        {loading ? (
+          <div className="p-6 space-y-3">
+            {[...Array(4)].map((_, i) => <div key={i} className="h-12 bg-cream-100 animate-pulse" />)}
+          </div>
+        ) : promotions.length === 0 ? (
           <div className="p-12 text-center">
             <Tag size={28} className="text-charcoal-700/20 mx-auto mb-3" />
             <p className="font-body text-sm text-charcoal-700/40">No promotions yet.</p>
@@ -251,12 +263,10 @@ export default function PromotionsPage() {
               </div>
               <span className="font-accent text-[9px] uppercase tracking-widest text-charcoal-700/50">{offer.category}</span>
               <div className="text-right">
-                <p className="font-body text-sm text-charcoal-900">₱{offer.packagePrice.toLocaleString()}</p>
-                {offer.discount > 0 && (
-                  <p className="font-accent text-[9px] text-gold-500">{offer.discount}% off</p>
-                )}
+                <p className="font-body text-sm text-charcoal-900">₱{offer.package_price.toLocaleString()}</p>
+                {offer.discount > 0 && <p className="font-accent text-[9px] text-gold-500">{offer.discount}% off</p>}
               </div>
-              <span className="font-body text-xs text-charcoal-700/50">{offer.validUntil}</span>
+              <span className="font-body text-xs text-charcoal-700/50">{offer.valid_until}</span>
               <span className={`font-accent text-[9px] uppercase tracking-widest px-2 py-1 ${statusColor(offer)}`}>
                 {statusLabel(offer)}
               </span>
