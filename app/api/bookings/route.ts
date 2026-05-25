@@ -6,13 +6,32 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const supabase = createAdminClient()
 
-    const confirmationCode = Math.random().toString(36).substring(2, 10).toUpperCase()
+    console.log('Booking POST body.roomId:', body.roomId, '| checkIn:', body.checkIn, '| checkOut:', body.checkOut)
+    // Check for conflicting bookings before inserting
+    if (body.roomId) {
+      const { data: conflicts } = await supabase
+        .from('bookings')
+        .select('id')
+        .eq('room_id', body.roomId)
+        .neq('status', 'cancelled')
+        .lt('check_in', body.checkOut)
+        .gt('check_out', body.checkIn)
+
+      if (conflicts && conflicts.length > 0) {
+        return NextResponse.json(
+          { error: 'This room is already booked for the selected dates. Please choose different dates or another room.' },
+          { status: 409 }
+        )
+      }
+    }
+
+    const confirmationCode = 'LUM-' + Math.random().toString(36).substring(2, 7).toUpperCase()
 
     const { data, error } = await supabase
       .from('bookings')
       .insert([{
         confirmation_code: confirmationCode,
-        room_id: null,
+        room_id: body.roomId || null,
         room_name: body.roomName,
         price_per_night: body.pricePerNight,
         guest_first_name: body.guest.firstName,
@@ -29,6 +48,7 @@ export async function POST(req: NextRequest) {
         total_price: body.totalPrice,
         status: 'pending',
         payment_status: 'unpaid',
+        booking_type: 'online',
       }])
       .select()
       .single()
