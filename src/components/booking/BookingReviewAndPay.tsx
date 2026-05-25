@@ -205,10 +205,10 @@ export default function BookingReviewAndPay({
                 <input
                   type="text"
                   inputMode="numeric"
-                  placeholder="YY"
+                  placeholder="YYYY"
                   value={expYear}
-                  onChange={e => setExpYear(e.target.value.replace(/\D/g, '').slice(0, 2))}
-                  maxLength={2}
+                  onChange={e => setExpYear(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                  maxLength={4}
                   className="w-full bg-charcoal-800 border border-charcoal-700 rounded-sm px-4 py-3
                     text-cream-100 font-body text-sm placeholder:text-charcoal-700
                     focus:outline-none focus:border-gold-500/60 transition-colors"
