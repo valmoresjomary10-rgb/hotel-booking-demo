@@ -137,7 +137,7 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
               details: {
                 card_number: paymentData.cardNumber,
                 exp_month:   parseInt(paymentData.cardExpMonth ?? '0'),
-                exp_year:    parseInt('20' + (paymentData.cardExpYear ?? '0')),
+                exp_year:    parseInt(paymentData.cardExpYear ?? '0'),
                 cvc:         paymentData.cardCvc,
               },
               billing: {
