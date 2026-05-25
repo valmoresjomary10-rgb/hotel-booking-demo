@@ -1,8 +1,7 @@
-// src/components/booking/BookingReviewAndPay.tsx
 'use client'
 
 import { useState } from 'react'
-import { ChevronLeft, CreditCard, Lock, AlertCircle } from 'lucide-react'
+import { ChevronLeft, CreditCard, Lock, AlertCircle, Smartphone, Wallet } from 'lucide-react'
 import { format } from 'date-fns'
 import type { BookingFormState } from '@/types/booking'
 
@@ -10,7 +9,16 @@ interface BookingReviewAndPayProps {
   state: BookingFormState
   totalPrice: number
   onBack: () => void
-  onConfirm: () => Promise<void>
+  onConfirm: (paymentMethod: PaymentMethodData) => Promise<void>
+}
+
+export interface PaymentMethodData {
+  method: 'card' | 'gcash' | 'maya'
+  // card only
+  cardNumber?: string
+  cardExpMonth?: string
+  cardExpYear?: string
+  cardCvc?: string
 }
 
 function formatPHP(amount: number) {
@@ -23,11 +31,8 @@ function formatPHP(amount: number) {
 
 function formatDate(dateStr: string) {
   if (!dateStr) return '—'
-  try {
-    return format(new Date(dateStr), 'EEE, MMM d, yyyy')
-  } catch {
-    return dateStr
-  }
+  try { return format(new Date(dateStr), 'EEE, MMM d, yyyy') }
+  catch { return dateStr }
 }
 
 function Row({ label, value }: { label: string; value: string }) {
@@ -41,23 +46,40 @@ function Row({ label, value }: { label: string; value: string }) {
   )
 }
 
+const METHODS = [
+  { id: 'card',  label: 'Credit / Debit Card', icon: CreditCard },
+  { id: 'gcash', label: 'GCash',               icon: Smartphone },
+  { id: 'maya',  label: 'Maya',                icon: Wallet },
+] as const
+
 export default function BookingReviewAndPay({
   state,
   totalPrice,
   onBack,
   onConfirm,
 }: BookingReviewAndPayProps) {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [method, setMethod]         = useState<'card' | 'gcash' | 'maya'>('card')
+  const [cardNumber, setCardNumber] = useState('')
+  const [expMonth, setExpMonth]     = useState('')
+  const [expYear, setExpYear]       = useState('')
+  const [cvc, setCvc]               = useState('')
+  const [loading, setLoading]       = useState(false)
+  const [error, setError]           = useState<string | null>(null)
 
-  const taxes = Math.round(totalPrice * 0.12)
+  const taxes     = Math.round(totalPrice * 0.12)
   const grandTotal = totalPrice + taxes
 
   const handleConfirm = async () => {
     setLoading(true)
     setError(null)
     try {
-      await onConfirm()
+      await onConfirm({
+        method,
+        cardNumber:   method === 'card' ? cardNumber.replace(/\s/g, '') : undefined,
+        cardExpMonth: method === 'card' ? expMonth : undefined,
+        cardExpYear:  method === 'card' ? expYear  : undefined,
+        cardCvc:      method === 'card' ? cvc      : undefined,
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
     } finally {
@@ -65,44 +87,31 @@ export default function BookingReviewAndPay({
     }
   }
 
+  const formatCardNumber = (val: string) =>
+    val.replace(/\D/g, '').slice(0, 16).replace(/(.{4})/g, '$1 ').trim()
+
   return (
     <div className="space-y-8">
+
       {/* Stay summary */}
       <div>
-        <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-4">
-          Booking Summary
-        </p>
+        <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-4">Booking Summary</p>
         <div className="border border-charcoal-700 rounded-sm p-5">
-          <Row label="Room" value={state.roomName} />
+          <Row label="Room"     value={state.roomName} />
           <Row label="Check-In" value={formatDate(state.checkIn)} />
           <Row label="Check-Out" value={formatDate(state.checkOut)} />
-          <Row
-            label="Duration"
-            value={`${state.nights} ${state.nights === 1 ? 'Night' : 'Nights'}`}
-          />
-          <Row
-            label="Guests"
-            value={`${state.adults} ${state.adults === 1 ? 'Adult' : 'Adults'}${
-              state.children > 0
-                ? `, ${state.children} ${state.children === 1 ? 'Child' : 'Children'}`
-                : ''
-            }`}
-          />
+          <Row label="Duration" value={`${state.nights} ${state.nights === 1 ? 'Night' : 'Nights'}`} />
+          <Row label="Guests"   value={`${state.adults} ${state.adults === 1 ? 'Adult' : 'Adults'}${state.children > 0 ? `, ${state.children} ${state.children === 1 ? 'Child' : 'Children'}` : ''}`} />
         </div>
       </div>
 
       {/* Guest summary */}
       <div>
-        <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-4">
-          Guest Details
-        </p>
+        <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-4">Guest Details</p>
         <div className="border border-charcoal-700 rounded-sm p-5">
-          <Row
-            label="Name"
-            value={`${state.guest.firstName} ${state.guest.lastName}`}
-          />
-          <Row label="Email" value={state.guest.email} />
-          <Row label="Phone" value={state.guest.phone} />
+          <Row label="Name"    value={`${state.guest.firstName} ${state.guest.lastName}`} />
+          <Row label="Email"   value={state.guest.email} />
+          <Row label="Phone"   value={state.guest.phone} />
           <Row label="Country" value={state.guest.country} />
           {state.guest.specialRequests && (
             <Row label="Requests" value={state.guest.specialRequests} />
@@ -112,14 +121,10 @@ export default function BookingReviewAndPay({
 
       {/* Price breakdown */}
       <div>
-        <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-4">
-          Payment
-        </p>
+        <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-4">Price Breakdown</p>
         <div className="border border-charcoal-700 rounded-sm p-5 space-y-3">
           <div className="flex justify-between text-sm">
-            <span className="text-cream-200/70 font-body">
-              {formatPHP(state.pricePerNight)} × {state.nights} nights
-            </span>
+            <span className="text-cream-200/70 font-body">{formatPHP(state.pricePerNight)} × {state.nights} nights</span>
             <span className="text-cream-100 font-body">{formatPHP(totalPrice)}</span>
           </div>
           <div className="flex justify-between text-sm">
@@ -128,29 +133,120 @@ export default function BookingReviewAndPay({
           </div>
           <div className="h-px bg-charcoal-700" />
           <div className="flex justify-between items-center">
-            <span className="text-xs tracking-widest uppercase font-accent text-gold-400">
-              Total Due
-            </span>
-            <span className="text-2xl font-display text-gold-400">
-              {formatPHP(grandTotal)}
-            </span>
+            <span className="text-xs tracking-widest uppercase font-accent text-gold-400">Total Due</span>
+            <span className="text-2xl font-display text-gold-400">{formatPHP(grandTotal)}</span>
           </div>
         </div>
       </div>
 
-      {/* PayMongo placeholder notice */}
-      <div className="flex items-start gap-3 py-3 px-4 bg-charcoal-800 border border-charcoal-700 rounded-sm">
-        <CreditCard className="h-4 w-4 text-gold-400 shrink-0 mt-0.5" />
-        <div>
-          <p className="text-xs text-cream-200/80 font-body">
-            Payment is processed securely via{' '}
-            <span className="text-gold-400 font-semibold">PayMongo</span>. You will be
-            redirected to the payment page after confirming your booking.
-          </p>
-          <p className="text-xs text-charcoal-700 font-body mt-1">
-            (Payment integration coming in Phase 12)
-          </p>
+      {/* Payment method selector */}
+      <div>
+        <p className="text-xs tracking-widest uppercase font-accent text-gold-400 mb-4">Payment Method</p>
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          {METHODS.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setMethod(id)}
+              className={`flex flex-col items-center gap-2 py-4 px-3 border rounded-sm transition-colors duration-200
+                ${method === id
+                  ? 'border-gold-500 bg-gold-500/10 text-gold-400'
+                  : 'border-charcoal-700 text-cream-200/50 hover:border-charcoal-600 hover:text-cream-200/70'
+                }`}
+            >
+              <Icon className="h-5 w-5" />
+              <span className="text-xs font-accent tracking-widest uppercase text-center leading-tight">
+                {label}
+              </span>
+            </button>
+          ))}
         </div>
+
+        {/* Card fields */}
+        {method === 'card' && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+                Card Number
+              </label>
+              <input
+                type="text"
+                inputMode="numeric"
+                placeholder="1234 5678 9012 3456"
+                value={cardNumber}
+                onChange={e => setCardNumber(formatCardNumber(e.target.value))}
+                maxLength={19}
+                className="w-full bg-charcoal-800 border border-charcoal-700 rounded-sm px-4 py-3
+                  text-cream-100 font-body text-sm placeholder:text-charcoal-700
+                  focus:outline-none focus:border-gold-500/60 transition-colors"
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <div>
+                <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+                  Month
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="MM"
+                  value={expMonth}
+                  onChange={e => setExpMonth(e.target.value.replace(/\D/g, '').slice(0, 2))}
+                  maxLength={2}
+                  className="w-full bg-charcoal-800 border border-charcoal-700 rounded-sm px-4 py-3
+                    text-cream-100 font-body text-sm placeholder:text-charcoal-700
+                    focus:outline-none focus:border-gold-500/60 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+                  Year
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="YY"
+                  value={expYear}
+                  onChange={e => setExpYear(e.target.value.replace(/\D/g, '').slice(0, 2))}
+                  maxLength={2}
+                  className="w-full bg-charcoal-800 border border-charcoal-700 rounded-sm px-4 py-3
+                    text-cream-100 font-body text-sm placeholder:text-charcoal-700
+                    focus:outline-none focus:border-gold-500/60 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+                  CVC
+                </label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="123"
+                  value={cvc}
+                  onChange={e => setCvc(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                  maxLength={4}
+                  className="w-full bg-charcoal-800 border border-charcoal-700 rounded-sm px-4 py-3
+                    text-cream-100 font-body text-sm placeholder:text-charcoal-700
+                    focus:outline-none focus:border-gold-500/60 transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* E-wallet notice */}
+        {(method === 'gcash' || method === 'maya') && (
+          <div className="flex items-start gap-3 py-3 px-4 bg-charcoal-800 border border-charcoal-700 rounded-sm">
+            <Smartphone className="h-4 w-4 text-gold-400 shrink-0 mt-0.5" />
+            <p className="text-xs text-cream-200/70 font-body">
+              You will be redirected to{' '}
+              <span className="text-gold-400 font-semibold">
+                {method === 'gcash' ? 'GCash' : 'Maya'}
+              </span>{' '}
+              to complete your payment. Once confirmed, you'll be brought back to your booking confirmation.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Error */}
@@ -185,12 +281,12 @@ export default function BookingReviewAndPay({
           {loading ? (
             <>
               <span className="h-4 w-4 border-2 border-charcoal-900/30 border-t-charcoal-900 rounded-full animate-spin" />
-              Confirming...
+              Processing...
             </>
           ) : (
             <>
               <Lock className="h-4 w-4" />
-              Confirm Booking
+              {method === 'card' ? 'Pay Now' : `Pay with ${method === 'gcash' ? 'GCash' : 'Maya'}`}
             </>
           )}
         </button>
@@ -198,7 +294,7 @@ export default function BookingReviewAndPay({
 
       <p className="text-xs text-charcoal-700 font-body text-center flex items-center justify-center gap-1.5">
         <Lock className="h-3 w-3" />
-        Your information is encrypted and secure
+        Payments secured by PayMongo
       </p>
     </div>
   )
