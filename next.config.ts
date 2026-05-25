@@ -1,6 +1,10 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  // ── General ─────────────────────────────────────────────────────────────────
+  compress: true,
+  poweredByHeader: false,
+
   // ── Image optimisation ──────────────────────────────────────────────────────
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -26,7 +30,6 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Cache static assets aggressively
         source: '/images/(.*)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
