@@ -8,7 +8,7 @@ const contactInfo = [
     icon: MapPin,
     label: 'Address',
     value: '123 Grand Avenue, Manila, Philippines',
-    href: 'https://maps.google.com/?q=Manila+Philippines',
+    href: 'https://maps.google.com/?q=10.1283125,124.3188125',
     external: true,
   },
   {
