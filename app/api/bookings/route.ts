@@ -7,7 +7,8 @@ export async function POST(req: NextRequest) {
     const supabase = createAdminClient()
 
     console.log('Booking POST body.roomId:', body.roomId, '| checkIn:', body.checkIn, '| checkOut:', body.checkOut)
-    // Check for conflicting bookings before inserting
+
+    // ── Conflict check ────────────────────────────────────────────────────────
     if (body.roomId) {
       const { data: conflicts } = await supabase
         .from('bookings')
@@ -27,28 +28,32 @@ export async function POST(req: NextRequest) {
 
     const confirmationCode = 'LUM-' + Math.random().toString(36).substring(2, 7).toUpperCase()
 
+    // ── Insert booking (starts as pending / unpaid) ───────────────────────────
     const { data, error } = await supabase
       .from('bookings')
       .insert([{
-        confirmation_code: confirmationCode,
-        room_id: body.roomId || null,
-        room_name: body.roomName,
-        price_per_night: body.pricePerNight,
-        guest_first_name: body.guest.firstName,
-        guest_last_name: body.guest.lastName,
-        guest_email: body.guest.email,
-        guest_phone: body.guest.phone,
-        guest_country: body.guest.country,
-        guest_special_requests: body.guest.specialRequests ?? null,
-        check_in: body.checkIn,
-        check_out: body.checkOut,
-        nights: body.nights,
-        adults: body.adults,
-        children: body.children,
-        total_price: body.totalPrice,
-        status: 'pending',
-        payment_status: 'unpaid',
-        booking_type: 'online',
+        confirmation_code:           confirmationCode,
+        room_id:                     body.roomId || null,
+        room_name:                   body.roomName,
+        price_per_night:             body.pricePerNight,
+        guest_first_name:            body.guest.firstName,
+        guest_last_name:             body.guest.lastName,
+        guest_email:                 body.guest.email,
+        guest_phone:                 body.guest.phone,
+        guest_country:               body.guest.country,
+        guest_special_requests:      body.guest.specialRequests ?? null,
+        check_in:                    body.checkIn,
+        check_out:                   body.checkOut,
+        nights:                      body.nights,
+        adults:                      body.adults,
+        children:                    body.children,
+        total_price:                 body.totalPrice,
+        status:                      'pending',
+        payment_status:              'unpaid',
+        booking_type:                'online',
+        payment_method:              body.paymentMethod ?? null,
+        paymongo_payment_intent_id:  body.paymentIntentId ?? null,
+        paymongo_source_id:          body.sourceId ?? null,
       }])
       .select()
       .single()
@@ -59,6 +64,7 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({ id: data.id, confirmationCode }, { status: 201 })
+
   } catch (err) {
     console.error('API error:', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
