@@ -1,7 +1,7 @@
-// src/components/booking/BookingForm.tsx
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useBooking } from '@/hooks/useBooking'
 import BookingStepIndicator from './BookingStepIndicator'
 import BookingDateSelector from './BookingDateSelector'
@@ -10,6 +10,7 @@ import BookingReviewAndPay from './BookingReviewAndPay'
 import BookingRoomSummary from './BookingRoomSummary'
 import BookingPriceSummary from './BookingPriceSummary'
 import type { GuestInfo } from '@/types/booking'
+import type { PaymentMethodData } from './BookingReviewAndPay'
 
 interface BookingFormProps {
   initialDates?: { checkIn: string; checkOut: string; nights: number; adults: number; children: number }
@@ -26,30 +27,31 @@ interface BookingFormProps {
 
 export default function BookingForm({ room, initialDates }: BookingFormProps) {
   const router = useRouter()
+  const [bookingError, setBookingError] = useState<string | null>(null)
 
   const { state, totalPrice, setDates, setGuests, setGuestInfo, goToStep } = useBooking({
-    roomId: room.id,
-    checkIn: initialDates?.checkIn ?? '',
-    checkOut: initialDates?.checkOut ?? '',
-    nights: initialDates?.nights ?? 0,
-    adults: initialDates?.adults ?? 1,
-    children: initialDates?.children ?? 0,
-    step: (initialDates?.nights ?? 0) > 0 ? 2 : 1,
-    roomName: room.name,
-    roomSlug: room.slug,
-    roomImage: room.images?.[0] || '',
+    roomId:       room.id,
+    checkIn:      initialDates?.checkIn  ?? '',
+    checkOut:     initialDates?.checkOut ?? '',
+    nights:       initialDates?.nights   ?? 0,
+    adults:       initialDates?.adults   ?? 1,
+    children:     initialDates?.children ?? 0,
+    step:         (initialDates?.nights ?? 0) > 0 ? 2 : 1,
+    roomName:     room.name,
+    roomSlug:     room.slug,
+    roomImage:    room.images?.[0] || '',
     pricePerNight: room.pricePerNight,
-    bedType: room.bedType,
-    capacity: room.capacity,
+    bedType:      room.bedType,
+    capacity:     room.capacity,
   })
+
+  const taxes     = Math.round(totalPrice * 0.12)
+  const grandTotal = totalPrice + taxes
 
   // Step 1 → 2
   const handleDatesSubmit = (values: {
-    checkIn: string
-    checkOut: string
-    adults: number
-    children: number
-    nights: number
+    checkIn: string; checkOut: string
+    adults: number; children: number; nights: number
   }) => {
     setDates(values.checkIn, values.checkOut, values.nights)
     setGuests(values.adults, values.children)
@@ -64,41 +66,144 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Step 3 → confirm → redirect
-  const handleConfirm = async () => {
-    const taxes = Math.round(totalPrice * 0.12)
-    const grandTotal = totalPrice + taxes
+  // Step 3 → payment → booking → redirect
+  const handleConfirm = async (paymentData: PaymentMethodData) => {
+    setBookingError(null)
 
-    const res = await fetch('/api/bookings', {
+    // ── 1. Initialise payment with PayMongo ───────────────────────────────────
+    const payRes = await fetch('/api/payments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        roomId: state.roomId,
-        roomName: state.roomName,
-        checkIn: state.checkIn,
-        checkOut: state.checkOut,
-        adults: state.adults,
-        nights: state.nights,
-        children: state.children,
-        pricePerNight: state.pricePerNight,
-        totalPrice: grandTotal,
-        guest: state.guest,
+        method:      paymentData.method,
+        amount:      grandTotal,
+        description: `Hotel Lumière — ${state.roomName} (${state.nights} nights)`,
+        bookingData: {
+          firstName: state.guest.firstName,
+          lastName:  state.guest.lastName,
+          email:     state.guest.email,
+          phone:     state.guest.phone,
+        },
       }),
     })
 
-    if (!res.ok) {
-      const err = await res.json()
+    if (!payRes.ok) {
+      const err = await payRes.json()
+      throw new Error(err?.error || 'Payment initialisation failed')
+    }
+
+    const payResult = await payRes.json()
+
+    // ── 2. Create booking record in Supabase ──────────────────────────────────
+    const bookRes = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        roomId:          state.roomId,
+        roomName:        state.roomName,
+        checkIn:         state.checkIn,
+        checkOut:        state.checkOut,
+        adults:          state.adults,
+        nights:          state.nights,
+        children:        state.children,
+        pricePerNight:   state.pricePerNight,
+        totalPrice:      grandTotal,
+        guest:           state.guest,
+        paymentMethod:   paymentData.method,
+        paymentIntentId: payResult.paymentIntentId ?? null,
+        sourceId:        payResult.sourceId        ?? null,
+      }),
+    })
+
+    if (!bookRes.ok) {
+      const err = await bookRes.json()
       throw new Error(err?.error || 'Failed to create booking')
     }
 
-    const { confirmationCode } = await res.json()
-    router.push(`/booking/confirmation?code=${confirmationCode}`)
+    const { confirmationCode } = await bookRes.json()
+
+    // ── 3. Card: attach payment method via PayMongo.js then redirect ──────────
+    if (paymentData.method === 'card') {
+      const pmRes = await fetch('https://api.paymongo.com/v1/payment_methods', {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${btoa(process.env.NEXT_PUBLIC_PAYMONGO_PUBLIC_KEY + ':')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: {
+            attributes: {
+              type: 'card',
+              details: {
+                card_number: paymentData.cardNumber,
+                exp_month:   parseInt(paymentData.cardExpMonth ?? '0'),
+                exp_year:    parseInt('20' + (paymentData.cardExpYear ?? '0')),
+                cvc:         paymentData.cardCvc,
+              },
+              billing: {
+                name:  `${state.guest.firstName} ${state.guest.lastName}`,
+                email: state.guest.email,
+                phone: state.guest.phone,
+              },
+            },
+          },
+        }),
+      })
+
+      if (!pmRes.ok) {
+        const err = await pmRes.json()
+        throw new Error(err?.errors?.[0]?.detail ?? 'Card tokenisation failed')
+      }
+
+      const pm = await pmRes.json()
+
+      // Attach to intent
+      const attachRes = await fetch('/api/payments/attach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paymentIntentId:  payResult.paymentIntentId,
+          paymentMethodId:  pm.data.id,
+          returnUrl: `${window.location.origin}/booking/confirmation?code=${confirmationCode}`,
+        }),
+      })
+
+      if (!attachRes.ok) {
+        const err = await attachRes.json()
+        throw new Error(err?.error ?? 'Failed to attach payment method')
+      }
+
+      const attachResult = await attachRes.json()
+      const status = attachResult?.data?.attributes?.status
+
+      // 3DS redirect if required
+      const nextAction = attachResult?.data?.attributes?.next_action
+      if (nextAction?.type === 'redirect') {
+        window.location.href = nextAction.redirect.url
+        return
+      }
+
+      if (status === 'succeeded') {
+        router.push(`/booking/confirmation?code=${confirmationCode}`)
+        return
+      }
+
+      throw new Error('Payment was not completed. Please try again.')
+    }
+
+    // ── 4. E-wallet: redirect to PayMongo checkout ────────────────────────────
+    if (payResult.redirectUrl) {
+      window.location.href = payResult.redirectUrl
+      return
+    }
+
+    throw new Error('No redirect URL returned for e-wallet payment.')
   }
 
   const stepTitles = {
     1: 'Select Dates & Guests',
     2: 'Guest Information',
-    3: 'Review & Confirm',
+    3: 'Review & Pay',
   }
 
   return (
@@ -114,6 +219,11 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
             Reserve Your Stay
           </h1>
           <BookingStepIndicator currentStep={state.step} />
+          {bookingError && (
+            <div className="mt-4 bg-red-50 border border-red-200 px-4 py-3 text-center">
+              <p className="font-body text-sm text-red-600">{bookingError}</p>
+            </div>
+          )}
         </div>
 
         {/* Main grid */}
@@ -128,12 +238,13 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
 
               {state.step === 1 && (
                 <BookingDateSelector
+                  roomId={room.id}
                   initialValues={{
-                    checkIn: state.checkIn,
+                    checkIn:  state.checkIn,
                     checkOut: state.checkOut,
-                    adults: state.adults,
-                    nights: state.nights,
-        children: state.children,
+                    adults:   state.adults,
+                    nights:   state.nights,
+                    children: state.children,
                   }}
                   onSubmit={handleDatesSubmit}
                 />
