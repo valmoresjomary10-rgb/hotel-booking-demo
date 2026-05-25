@@ -3,16 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Jost", system-ui, sans-serif;
-  --font-accent: "Cinzel", Georgia, serif;
   --color-gold-400: #d4aa5f;
   --color-gold-500: #c49a3a;
   --color-gold-600: #a67c1e;
   --color-charcoal-900: #0f0f0f;
   --color-charcoal-800: #1a1a1a;
   --color-charcoal-700: #2a2a2a;
-  --color-cream-50: #fefefe;
+  --color-cream-50:  #fefefe;
   --color-cream-100: #f9f6f1;
   --color-cream-200: #f0ebe0;
 }
