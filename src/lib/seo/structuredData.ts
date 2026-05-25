@@ -5,15 +5,15 @@ export function hotelStructuredData() {
     '@context': 'https://schema.org',
     '@type': 'Hotel',
     name: 'Hotel Lumière',
-    description: 'A premier luxury hotel experience in Cebu, Philippines.',
+    description: 'A premier luxury hotel experience in Bohol, Philippines.',
     url: BASE_URL,
     telephone: '+6328888000',
     email: 'reservations@hotellumiere.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: '123 Grand Avenue',
-      addressLocality: 'Cebu City',
-      addressRegion: 'Central Visayas',
+      addressLocality: "Panglao",
+      addressRegion: "Bohol",
       addressCountry: 'PH',
     },
     geo: {

@@ -9,14 +9,14 @@ export const defaultMetadata: Metadata = {
     template: '%s | Hotel Lumière',
   },
   description:
-    'Experience unparalleled luxury at Hotel Lumière in Cebu, Philippines. Book your stay and enjoy world-class amenities, stunning rooms, and exceptional service.',
+    'Experience unparalleled luxury at Hotel Lumière in Bohol, Philippines. Book your stay and enjoy world-class amenities, stunning rooms, and exceptional service.',
   keywords: [
-    'luxury hotel Cebu',
+    'luxury hotel Bohol',
     'Hotel Lumière',
-    'Cebu hotel',
+    'Bohol hotel',
     'luxury accommodation Philippines',
-    'hotel booking Cebu',
-    'resort Cebu Philippines',
+    'hotel booking Bohol',
+    'resort Bohol Philippines',
   ],
   authors: [{ name: 'Hotel Lumière' }],
   creator: 'Hotel Lumière',
@@ -27,7 +27,7 @@ export const defaultMetadata: Metadata = {
     siteName: 'Hotel Lumière',
     title: 'Hotel Lumière — Where Luxury Meets Serenity',
     description:
-      'Experience unparalleled luxury at Hotel Lumière in Cebu, Philippines.',
+      'Experience unparalleled luxury at Hotel Lumière in Bohol, Philippines.',
     images: [
       {
         url: '/images/og-image.jpg',
@@ -41,7 +41,7 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hotel Lumière — Where Luxury Meets Serenity',
     description:
-      'Experience unparalleled luxury at Hotel Lumière in Cebu, Philippines.',
+      'Experience unparalleled luxury at Hotel Lumière in Bohol, Philippines.',
     images: ['/images/og-image.jpg'],
   },
   robots: {
