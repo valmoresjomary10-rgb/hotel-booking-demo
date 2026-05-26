@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Missing payment_intent_id' }, { status: 400 })
       }
 
-      const supabase = createClient()
+      const supabase = await createClient()
       const { error } = await supabase
         .from('bookings')
         .update({
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
       const charge = await chargeRes.json()
 
       // Update booking to paid
-      const supabase = createClient()
+      const supabase = await createClient()
       const { error } = await supabase
         .from('bookings')
         .update({

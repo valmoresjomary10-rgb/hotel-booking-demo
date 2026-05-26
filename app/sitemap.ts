@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://hotellumiere.com'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const [roomsResult, blogsResult] = await Promise.allSettled([
     supabase.from('rooms').select('slug, updated_at'),

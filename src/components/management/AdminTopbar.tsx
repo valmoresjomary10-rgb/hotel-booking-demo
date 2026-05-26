@@ -27,9 +27,10 @@ export default function AdminTopbar() {
       <Link
         href="/"
         target="_blank"
+        aria-label="View public site (opens in new tab)"
         className="flex items-center gap-1.5 font-body text-xs text-charcoal-700/40 hover:text-gold-500 transition-colors"
       >
-        <ExternalLink size={12} />
+        <ExternalLink aria-hidden="true" size={12} />
         View Site
       </Link>
     </header>
