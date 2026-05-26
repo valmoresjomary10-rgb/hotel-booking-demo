@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import Button from '@/components/ui/Button'
 import Divider from '@/components/ui/Divider'
 
@@ -17,10 +18,14 @@ export default function CTASection() {
           Every stay at Hotel Lumière is a story waiting to be written. Let us craft yours.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="primary" size="lg">Book Now</Button>
-          <Button variant="outline" size="lg" className="border-cream-200 text-cream-200 hover:bg-cream-200 hover:text-charcoal-900">
-            Contact Us
-          </Button>
+          <Link href="/booking">
+            <Button variant="primary" size="lg" aria-label="Book your stay at Hotel Lumière">Book Now</Button>
+          </Link>
+          <Link href="/contact">
+            <Button variant="outline" size="lg" aria-label="Contact Hotel Lumière" className="border-cream-200 text-cream-200 hover:bg-cream-200 hover:text-charcoal-900">
+              Contact Us
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

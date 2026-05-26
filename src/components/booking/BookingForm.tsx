@@ -250,7 +250,7 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
           <h1 className="font-display text-4xl sm:text-5xl text-charcoal-900 mb-6">Reserve Your Stay</h1>
           <BookingStepIndicator currentStep={state.step} />
           {bookingError && (
-            <div className="mt-4 bg-red-50 border border-red-200 px-4 py-3 text-center">
+            <div role="alert" aria-live="polite" className="mt-4 bg-red-50 border border-red-200 px-4 py-3 text-center">
               <p className="font-body text-sm text-red-600">{bookingError}</p>
             </div>
           )}
@@ -259,7 +259,7 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2">
             <div className="bg-charcoal-900 border border-charcoal-700 rounded-sm p-6 sm:p-8">
-              <h2 className="font-display text-2xl text-cream-100 mb-6">{stepTitles[state.step]}</h2>
+              <h2 aria-live="polite" aria-atomic="true" className="font-display text-2xl text-cream-100 mb-6">{stepTitles[state.step]}</h2>
 
               {state.step === 1 && (
                 <BookingDateSelector

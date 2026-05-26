@@ -20,7 +20,7 @@ interface BookingStepIndicatorProps {
 
 export default function BookingStepIndicator({ currentStep }: BookingStepIndicatorProps) {
   return (
-    <div className="flex items-center justify-center gap-0">
+    <nav aria-label="Booking progress" className="flex items-center justify-center gap-0">
       {STEPS.map((step, index) => {
         const isCompleted = step.number < currentStep
         const isActive = step.number === currentStep
@@ -30,7 +30,9 @@ export default function BookingStepIndicator({ currentStep }: BookingStepIndicat
             {/* Step bubble */}
             <div className="flex flex-col items-center gap-2">
               <div
-                className={`
+                aria-label={`Step ${step.number} of 3: ${step.label} - ${isCompleted ? 'completed' : isActive ? 'current' : 'upcoming'}`}
+              aria-current={isActive ? 'step' : undefined}
+              className={`
                   flex h-10 w-10 items-center justify-center rounded-full border-2 text-sm font-semibold transition-all duration-300
                   font-accent tracking-wider
                   ${isCompleted
@@ -69,6 +71,6 @@ export default function BookingStepIndicator({ currentStep }: BookingStepIndicat
           </div>
         )
       })}
-    </div>
+    </nav>
   )
 }

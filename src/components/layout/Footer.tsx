@@ -5,7 +5,7 @@ import Divider from '@/components/ui/Divider'
 
 export default function Footer() {
   return (
-    <footer className="bg-charcoal-900 text-cream-100">
+    <footer aria-label="Site footer" className="bg-charcoal-900 text-cream-100">
       <div className="container mx-auto pt-16 pb-8">
 
         {/* Top Grid */}
@@ -26,10 +26,10 @@ export default function Footer() {
             </p>
             {/* Socials */}
             <div className="flex gap-4">
-              <a href={siteConfig.socials.instagram} className="font-accent text-xs tracking-widest text-cream-200 hover:text-gold-400 transition-colors uppercase">
+              <a href={siteConfig.socials.instagram} aria-label="Follow us on Instagram" target="_blank" rel="noopener noreferrer" className="font-accent text-xs tracking-widest text-cream-200 hover:text-gold-400 transition-colors uppercase">
                 Instagram
               </a>
-              <a href={siteConfig.socials.facebook} className="font-accent text-xs tracking-widest text-cream-200 hover:text-gold-400 transition-colors uppercase">
+              <a href={siteConfig.socials.facebook} aria-label="Follow us on Facebook" target="_blank" rel="noopener noreferrer" className="font-accent text-xs tracking-widest text-cream-200 hover:text-gold-400 transition-colors uppercase">
                 Facebook
               </a>
             </div>

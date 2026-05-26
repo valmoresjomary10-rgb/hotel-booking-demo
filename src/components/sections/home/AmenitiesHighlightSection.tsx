@@ -28,15 +28,15 @@ export default function AmenitiesHighlightSection() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+        <ul className="grid grid-cols-2 md:grid-cols-3 gap-8 list-none p-0">
           {amenities.map((item) => (
-            <div key={item.title} className="group text-center p-8 border border-charcoal-700 hover:border-gold-500/50 transition-all duration-300">
-              <div className="text-4xl mb-4">{item.icon}</div>
+            <li key={item.title} className="group text-center p-8 border border-charcoal-700 hover:border-gold-500/50 transition-all duration-300">
+              <div className="text-4xl mb-4" aria-hidden="true">{item.icon}</div>
               <h3 className="font-accent text-cream-50 text-sm tracking-widest uppercase mb-2">{item.title}</h3>
               <p className="font-body text-cream-200/60 text-sm leading-relaxed">{item.description}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
 
         <div className="text-center mt-12">
           <Link href="/amenities">

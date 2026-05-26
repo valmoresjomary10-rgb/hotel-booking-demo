@@ -24,9 +24,11 @@ export default function HeroSection() {
           Where every moment is crafted with elegance. Experience luxury redefined in the heart of Manila.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="primary" size="lg" className="min-w-[180px]">
-            Book Your Stay
-          </Button>
+          <Link href="/booking">
+            <Button variant="primary" size="lg" className="min-w-[180px]" aria-label="Book your stay at Hotel Lumière">
+              Book Your Stay
+            </Button>
+          </Link>
           <Link href="/rooms">
             <Button variant="outline" size="lg" className="min-w-[180px] border-cream-50 text-cream-50 hover:bg-cream-50 hover:text-charcoal-900">
               Explore Rooms
@@ -38,11 +40,11 @@ export default function HeroSection() {
         <div className="flex justify-center gap-12 mt-16 pt-8 border-t border-cream-50/20">
           {[
             { value: '48', label: 'Luxury Rooms' },
-            { value: '5★', label: 'Rating' },
+            { value: '5★', label: 'Rating', ariaValue: '5 star rating' },
             { value: '15+', label: 'Years of Excellence' },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <p className="font-display text-gold-400 text-3xl font-light">{stat.value}</p>
+              <p className="font-display text-gold-400 text-3xl font-light" aria-label={'ariaValue' in stat ? stat.ariaValue : stat.value}>{stat.value}</p>
               <p className="font-accent text-cream-200/70 text-xs tracking-widest uppercase mt-1">{stat.label}</p>
             </div>
           ))}
@@ -50,7 +52,7 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+      <div aria-hidden="true" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
         <span className="font-accent text-cream-200/50 text-xs tracking-widest uppercase">Scroll</span>
         <div className="w-px h-8 bg-gold-400/50" />
       </div>

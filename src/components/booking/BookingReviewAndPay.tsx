@@ -148,6 +148,8 @@ export default function BookingReviewAndPay({
               key={id}
               type="button"
               onClick={() => setMethod(id)}
+              aria-pressed={method === id}
+              aria-label={`Pay with ${label}`}
               className={`flex flex-col items-center gap-2 py-4 px-3 border rounded-sm transition-colors duration-200
                 ${method === id
                   ? 'border-gold-500 bg-gold-500/10 text-gold-400'
@@ -166,10 +168,11 @@ export default function BookingReviewAndPay({
         {method === 'card' && (
           <div className="space-y-4">
             <div>
-              <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+              <label htmlFor="cardNumber" className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
                 Card Number
               </label>
               <input
+                id="cardNumber"
                 type="text"
                 inputMode="numeric"
                 placeholder="1234 5678 9012 3456"
@@ -183,10 +186,11 @@ export default function BookingReviewAndPay({
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+                <label htmlFor="expMonth" className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
                   Month
                 </label>
                 <input
+                  id="expMonth"
                   type="text"
                   inputMode="numeric"
                   placeholder="MM"
@@ -199,10 +203,11 @@ export default function BookingReviewAndPay({
                 />
               </div>
               <div>
-                <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+                <label htmlFor="expYear" className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
                   Year
                 </label>
                 <input
+                  id="expYear"
                   type="text"
                   inputMode="numeric"
                   placeholder="YYYY"
@@ -215,10 +220,11 @@ export default function BookingReviewAndPay({
                 />
               </div>
               <div>
-                <label className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
+                <label htmlFor="cvc" className="block text-xs tracking-widest uppercase font-accent text-charcoal-700 mb-2">
                   CVC
                 </label>
                 <input
+                  id="cvc"
                   type="text"
                   inputMode="numeric"
                   placeholder="123"
@@ -251,8 +257,8 @@ export default function BookingReviewAndPay({
 
       {/* Error */}
       {error && (
-        <div className="flex items-center gap-2 py-3 px-4 bg-red-500/10 border border-red-500/30 rounded-sm">
-          <AlertCircle className="h-4 w-4 text-red-400 shrink-0" />
+        <div role="alert" aria-live="assertive" className="flex items-center gap-2 py-3 px-4 bg-red-500/10 border border-red-500/30 rounded-sm">
+          <AlertCircle className="h-4 w-4 text-red-400 shrink-0" aria-hidden="true" />
           <p className="text-xs text-red-400 font-body">{error}</p>
         </div>
       )}
@@ -280,8 +286,8 @@ export default function BookingReviewAndPay({
         >
           {loading ? (
             <>
-              <span className="h-4 w-4 border-2 border-charcoal-900/30 border-t-charcoal-900 rounded-full animate-spin" />
-              Processing...
+              <span role="status" aria-label="Processing payment" className="h-4 w-4 border-2 border-charcoal-900/30 border-t-charcoal-900 rounded-full animate-spin" />
+              <span aria-hidden="true">Processing...</span>
             </>
           ) : (
             <>

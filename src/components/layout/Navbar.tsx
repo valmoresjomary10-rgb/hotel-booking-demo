@@ -6,10 +6,12 @@ import { publicNavLinks } from '@/constants/navigation'
 import { siteConfig } from '@/constants/siteConfig'
 import { cn } from '@/lib/utils/cn'
 import Button from '@/components/ui/Button'
+import { usePathname } from 'next/navigation'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -19,7 +21,7 @@ export default function Navbar() {
 
   return (
     <>
-      
+      <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-gold-500 focus:text-cream-50 focus:font-accent focus:text-sm focus:tracking-widest focus:uppercase"
       >
@@ -50,6 +52,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={pathname === link.href ? 'page' : undefined}
                 className="font-body text-sm text-charcoal-700 hover:text-gold-500 transition-colors tracking-wide relative group focus-visible:outline-none focus-visible:text-gold-500"
               >
                 {link.label}
@@ -80,10 +83,10 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu */}
-        <div
+        <nav
           id="mobile-menu"
-          role="navigation"
           aria-label="Mobile navigation"
+          aria-hidden={!menuOpen}
           className={cn(
             'lg:hidden bg-cream-50 border-t border-cream-200 px-6 py-6 flex flex-col gap-4',
             menuOpen ? 'block' : 'hidden'
@@ -102,7 +105,7 @@ export default function Navbar() {
           <Link href="/booking" className="mt-2">
             <Button variant="primary" size="md" className="w-full">Book Now</Button>
           </Link>
-        </div>
+        </nav>
       </header>
     </>
   )

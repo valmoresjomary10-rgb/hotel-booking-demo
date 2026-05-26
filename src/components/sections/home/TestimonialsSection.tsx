@@ -38,20 +38,22 @@ export default function TestimonialsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((t) => (
-            <div key={t.author} className="bg-cream-50 p-8 shadow-card">
-              <div className="flex gap-1 mb-6">
+            <figure key={t.author} className="bg-cream-50 p-8 shadow-card">
+              <div className="flex gap-1 mb-6" aria-label={`Rated ${t.rating} out of 5 stars`}>
                 {Array.from({ length: t.rating }).map((_, i) => (
-                  <span key={i} className="text-gold-400 text-sm">★</span>
+                  <span key={i} aria-hidden="true" className="text-gold-400 text-sm">★</span>
                 ))}
               </div>
-              <p className="font-body text-charcoal-700 text-sm leading-relaxed italic mb-6">
-                "{t.quote}"
-              </p>
-              <div className="border-t border-cream-200 pt-4">
+              <blockquote>
+                <p className="font-body text-charcoal-700 text-sm leading-relaxed italic mb-6">
+                  "{t.quote}"
+                </p>
+              </blockquote>
+              <figcaption className="border-t border-cream-200 pt-4">
                 <p className="font-accent text-charcoal-900 text-xs tracking-widest uppercase">{t.author}</p>
                 <p className="font-body text-charcoal-700/60 text-xs mt-1">{t.role}</p>
-              </div>
-            </div>
+              </figcaption>
+            </figure>
           ))}
         </div>
       </div>

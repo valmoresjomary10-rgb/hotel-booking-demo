@@ -144,7 +144,7 @@ export default function ContactFormSection() {
             <div className="mt-5 h-px w-16 bg-gold-400" />
 
             {formState === 'success' && (
-              <div className="mt-8 flex items-start gap-4 border border-gold-400/40 bg-gold-400/5 p-6">
+              <div role="alert" aria-live="polite" className="mt-8 flex items-start gap-4 border border-gold-400/40 bg-gold-400/5 p-6">
                 <CheckCircle className="mt-0.5 shrink-0 text-gold-500" size={20} strokeWidth={1.5} />
                 <div>
                   <p className="font-display text-lg text-charcoal-900">Message Sent</p>
@@ -156,7 +156,7 @@ export default function ContactFormSection() {
             )}
 
             {formState === 'error' && (
-              <div className="mt-8 flex items-start gap-4 border border-red-300 bg-red-50 p-6">
+              <div role="alert" aria-live="assertive" className="mt-8 flex items-start gap-4 border border-red-300 bg-red-50 p-6">
                 <AlertCircle className="mt-0.5 shrink-0 text-red-500" size={20} strokeWidth={1.5} />
                 <div>
                   <p className="font-display text-lg text-charcoal-900">Something went wrong</p>
@@ -171,10 +171,11 @@ export default function ContactFormSection() {
               <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="firstName" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       First Name <span className="text-gold-500">*</span>
                     </label>
                     <input
+                      id="firstName"
                       type="text"
                       name="firstName"
                       required
@@ -185,10 +186,11 @@ export default function ContactFormSection() {
                     />
                   </div>
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="lastName" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       Last Name <span className="text-gold-500">*</span>
                     </label>
                     <input
+                      id="lastName"
                       type="text"
                       name="lastName"
                       required
@@ -202,10 +204,11 @@ export default function ContactFormSection() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="email" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       Email <span className="text-gold-500">*</span>
                     </label>
                     <input
+                      id="email"
                       type="email"
                       name="email"
                       required
@@ -216,10 +219,11 @@ export default function ContactFormSection() {
                     />
                   </div>
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="phone" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       Phone
                     </label>
                     <input
+                      id="phone"
                       type="tel"
                       name="phone"
                       value={formData.phone}
@@ -231,10 +235,11 @@ export default function ContactFormSection() {
                 </div>
 
                 <div>
-                  <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                  <label htmlFor="subject" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                     Subject <span className="text-gold-500">*</span>
                   </label>
                   <select
+                    id="subject"
                     name="subject"
                     required
                     value={formData.subject}
@@ -252,10 +257,11 @@ export default function ContactFormSection() {
                 </div>
 
                 <div>
-                  <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                  <label htmlFor="message" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                     Message <span className="text-gold-500">*</span>
                   </label>
                   <textarea
+                    id="message"
                     name="message"
                     required
                     rows={5}
@@ -273,8 +279,8 @@ export default function ContactFormSection() {
                 >
                   {formState === 'loading' ? (
                     <>
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-charcoal-900 border-t-transparent" />
-                      Sending...
+                      <span role="status" aria-label="Sending message" className="h-4 w-4 animate-spin rounded-full border-2 border-charcoal-900 border-t-transparent" />
+                      <span aria-hidden="true">Sending...</span>
                     </>
                   ) : (
                     <>

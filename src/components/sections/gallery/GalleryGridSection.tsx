@@ -33,6 +33,8 @@ export default function GalleryGridSection() {
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
+              aria-pressed={activeCategory === cat.value}
+              aria-label={`Filter by ${cat.label}`}
               className={`font-accent text-xs uppercase tracking-widest px-5 py-2.5 border transition-all duration-300 ${
                 activeCategory === cat.value
                   ? 'border-gold-400 bg-gold-400 text-charcoal-900'
@@ -47,9 +49,10 @@ export default function GalleryGridSection() {
         {/* Masonry Grid */}
         <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4">
           {filtered.map((item, index) => (
-            <div
+            <button
               key={item.id}
-              className="group relative mb-4 cursor-pointer overflow-hidden break-inside-avoid"
+              aria-label={`View ${item.alt}`}
+              className="group relative mb-4 w-full cursor-pointer overflow-hidden break-inside-avoid text-left"
               onClick={() => openLightbox(index)}
             >
               <img
@@ -66,7 +69,7 @@ export default function GalleryGridSection() {
               </div>
               {/* Gold border on hover */}
               <div className="pointer-events-none absolute inset-0 border border-gold-400/0 transition-all duration-300 group-hover:border-gold-400/60" />
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -74,11 +77,15 @@ export default function GalleryGridSection() {
       {/* Lightbox */}
       {lightboxIndex !== null && (
         <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image lightbox"
           className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal-900/95"
           onClick={closeLightbox}
         >
           {/* Close */}
           <button
+            aria-label="Close lightbox"
             className="absolute right-6 top-6 text-cream-200/60 transition-colors hover:text-gold-400"
             onClick={closeLightbox}
           >
@@ -87,6 +94,7 @@ export default function GalleryGridSection() {
 
           {/* Prev */}
           <button
+            aria-label="Previous image"
             className="absolute left-4 top-1/2 -translate-y-1/2 text-cream-200/60 transition-colors hover:text-gold-400 md:left-8"
             onClick={(e) => { e.stopPropagation(); prev() }}
           >
@@ -113,6 +121,7 @@ export default function GalleryGridSection() {
 
           {/* Next */}
           <button
+            aria-label="Next image"
             className="absolute right-4 top-1/2 -translate-y-1/2 text-cream-200/60 transition-colors hover:text-gold-400 md:right-8"
             onClick={(e) => { e.stopPropagation(); next() }}
           >

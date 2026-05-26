@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { rooms as initialRooms } from '@/constants/roomData'
 import { BedType, RoomStatus } from '@/types/room'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
@@ -25,6 +24,7 @@ export default function NewRoomPage() {
     rating: '5.0', reviewCount: '0',
   })
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
 
   const set = (key: string, value: unknown) => setForm(f => ({ ...f, [key]: value }))
 
@@ -34,27 +34,30 @@ export default function NewRoomPage() {
       : [...form.amenities, a])
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
-    const stored = localStorage.getItem('lum_rooms')
-    const existing = stored ? JSON.parse(stored) : initialRooms
-    const newRoom = {
-      ...form,
-      id: String(Date.now()),
-      slug: form.slug || form.name.toLowerCase().replace(/\s+/g, '-'),
-      pricePerNight: Number(form.pricePerNight),
-      capacity: Number(form.capacity),
-      size: Number(form.size),
-      floor: Number(form.floor),
-      rating: Number(form.rating),
-      reviewCount: Number(form.reviewCount),
-      images: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    setError('')
+    const res = await fetch('/api/rooms', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...form,
+        pricePerNight: Number(form.pricePerNight),
+        capacity: Number(form.capacity),
+        size: Number(form.size),
+        floor: Number(form.floor),
+        rating: Number(form.rating),
+        reviewCount: Number(form.reviewCount),
+      }),
+    })
+    if (res.ok) {
+      router.push('/management/rooms')
+    } else {
+      const data = await res.json()
+      setError(data.error ?? 'Failed to save room.')
+      setSaving(false)
     }
-    localStorage.setItem('lum_rooms', JSON.stringify([...existing, newRoom]))
-    router.push('/management/rooms')
   }
 
   return (
@@ -68,6 +71,8 @@ export default function NewRoomPage() {
           <h2 className="font-display text-3xl text-charcoal-900">Add New Room</h2>
         </div>
       </div>
+
+      {error && <p className="mb-4 px-4 py-3 bg-red-50 border border-red-200 font-body text-sm text-red-600">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white border border-cream-200 p-6 space-y-4">
@@ -130,8 +135,7 @@ export default function NewRoomPage() {
             </div>
           </div>
           <div className="flex items-center gap-3 pt-1">
-            <input type="checkbox" id="featured" checked={form.featured} onChange={e => set('featured', e.target.checked)}
-              className="accent-gold-500" />
+            <input type="checkbox" id="featured" checked={form.featured} onChange={e => set('featured', e.target.checked)} className="accent-gold-500" />
             <label htmlFor="featured" className="font-body text-sm text-charcoal-700/70">Featured room (shown on homepage)</label>
           </div>
         </div>
@@ -141,8 +145,7 @@ export default function NewRoomPage() {
           <div className="grid grid-cols-2 gap-2">
             {amenityOptions.map(a => (
               <label key={a} className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" checked={form.amenities.includes(a)} onChange={() => toggleAmenity(a)}
-                  className="accent-gold-500" />
+                <input type="checkbox" checked={form.amenities.includes(a)} onChange={() => toggleAmenity(a)} className="accent-gold-500" />
                 <span className="font-body text-sm text-charcoal-700/70">{a}</span>
               </label>
             ))}
@@ -150,9 +153,7 @@ export default function NewRoomPage() {
         </div>
 
         <div className="flex items-center gap-3 justify-end">
-          <Link href="/management/rooms" className="font-body text-sm text-charcoal-700/50 hover:text-charcoal-900 px-5 py-3 transition-colors">
-            Cancel
-          </Link>
+          <Link href="/management/rooms" className="font-body text-sm text-charcoal-700/50 hover:text-charcoal-900 px-5 py-3 transition-colors">Cancel</Link>
           <button type="submit" disabled={saving}
             className="bg-gold-500 hover:bg-gold-600 disabled:opacity-50 text-charcoal-900 font-accent text-[10px] uppercase tracking-widest px-8 py-3 transition-colors">
             {saving ? 'Saving...' : 'Save Room'}

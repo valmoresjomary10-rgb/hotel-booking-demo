@@ -50,8 +50,9 @@ export default function RoomsClient() {
         {/* Date Picker */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 px-6">
           <div className="flex flex-col items-start">
-            <label className="font-accent text-[10px] uppercase tracking-widest text-gold-400/70 mb-1">Check-in</label>
+            <label htmlFor="filterCheckIn" className="font-accent text-[10px] uppercase tracking-widest text-gold-400/70 mb-1">Check-in</label>
             <input
+              id="filterCheckIn"
               type="date"
               min={today}
               value={checkIn}
@@ -60,8 +61,9 @@ export default function RoomsClient() {
             />
           </div>
           <div className="flex flex-col items-start">
-            <label className="font-accent text-[10px] uppercase tracking-widest text-gold-400/70 mb-1">Check-out</label>
+            <label htmlFor="filterCheckOut" className="font-accent text-[10px] uppercase tracking-widest text-gold-400/70 mb-1">Check-out</label>
             <input
+              id="filterCheckOut"
               type="date"
               min={checkIn || today}
               value={checkOut}
@@ -72,6 +74,7 @@ export default function RoomsClient() {
           {(checkIn || checkOut) && (
             <button
               onClick={() => { setCheckIn(''); setCheckOut(''); setUnavailableIds([]) }}
+              aria-label="Clear selected dates"
               className="font-accent text-[9px] uppercase tracking-widest text-gold-400/60 hover:text-gold-400 transition-colors mt-4 sm:mt-5"
             >
               Clear dates
@@ -93,9 +96,9 @@ export default function RoomsClient() {
 
       <section className="bg-cream-100 py-20 px-6">
         {loading ? (
-          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div role="status" aria-busy="true" aria-label="Loading rooms" className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1,2,3,4,5,6].map(i => (
-              <div key={i} className="bg-cream-50 h-96 animate-pulse" />
+              <div key={i} aria-hidden="true" className="bg-cream-50 h-96 animate-pulse" />
             ))}
           </div>
         ) : (
@@ -105,8 +108,8 @@ export default function RoomsClient() {
               return (
                 <div key={room.id} className={isUnavailable ? 'opacity-50 pointer-events-none relative' : ''}>
                   {isUnavailable && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/10">
-                      <span className="bg-charcoal-900 text-cream-50 font-accent text-[9px] uppercase tracking-widest px-4 py-2">
+                    <div aria-label="Room unavailable for selected dates" className="absolute inset-0 z-10 flex items-center justify-center bg-charcoal-900/10">
+                      <span aria-hidden="true" className="bg-charcoal-900 text-cream-50 font-accent text-[9px] uppercase tracking-widest px-4 py-2">
                         Unavailable
                       </span>
                     </div>

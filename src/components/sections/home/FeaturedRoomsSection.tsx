@@ -55,7 +55,7 @@ export default function FeaturedRoomsSection() {
         {/* Room Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredRooms.map((room) => (
-            <div key={room.slug} className="group bg-cream-50 shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden">
+            <article key={room.slug} aria-label={room.name} className="group bg-cream-50 shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden">
               {/* Image placeholder */}
               <div className={`${room.bg} h-64 relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
@@ -77,11 +77,11 @@ export default function FeaturedRoomsSection() {
                     <span className="font-body text-charcoal-700/60 text-sm"> / night</span>
                   </div>
                   <Link href={`/rooms/${room.slug}`}>
-                    <Button variant="outline" size="sm">View Room</Button>
+                    <Button variant="outline" size="sm" aria-label={`View ${room.name}`}>View Room</Button>
                   </Link>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
 

@@ -15,7 +15,7 @@ interface RoomCardProps {
 
 export default function RoomCard({ room, index = 0 }: RoomCardProps) {
   return (
-    <div className="group bg-cream-50 shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden">
+    <article aria-label={room.name} className="group bg-cream-50 shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden">
       {/* Image */}
       <div className={cn('h-64 relative overflow-hidden', bgColors[index % bgColors.length])}>
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/70 to-transparent" />
@@ -37,10 +37,10 @@ export default function RoomCard({ room, index = 0 }: RoomCardProps) {
       <div className="p-6 space-y-3">
         <div className="flex items-start justify-between">
           <h3 className="font-display text-charcoal-900 text-2xl font-light">{room.name}</h3>
-          <div className="flex items-center gap-1 mt-1">
-            <span className="text-gold-400 text-sm">★</span>
-            <span className="font-body text-charcoal-700 text-sm">{room.rating}</span>
-            <span className="font-body text-charcoal-700/50 text-xs">({room.reviewCount})</span>
+          <div className="flex items-center gap-1 mt-1" aria-label={`Rated ${room.rating} out of 5, ${room.reviewCount} reviews`}>
+            <span className="text-gold-400 text-sm" aria-hidden="true">★</span>
+            <span className="font-body text-charcoal-700 text-sm" aria-hidden="true">{room.rating}</span>
+            <span className="font-body text-charcoal-700/50 text-xs" aria-hidden="true">({room.reviewCount})</span>
           </div>
         </div>
         <p className="font-body text-charcoal-700 text-sm leading-relaxed line-clamp-2">
@@ -54,10 +54,10 @@ export default function RoomCard({ room, index = 0 }: RoomCardProps) {
             <span className="font-body text-charcoal-700/60 text-sm"> / night</span>
           </div>
           <Link href={`/rooms/${room.slug}`}>
-            <Button variant="outline" size="sm">View Room</Button>
+            <Button variant="outline" size="sm" aria-label={`View ${room.name}`}>View Room</Button>
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
