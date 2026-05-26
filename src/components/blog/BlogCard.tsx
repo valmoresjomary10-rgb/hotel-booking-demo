@@ -29,8 +29,8 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
               </h2>
               <p className="font-body text-sm text-cream-200/70 mt-3 line-clamp-2">{post.excerpt}</p>
               <div className="flex items-center gap-4 mt-4 text-cream-200/50 text-xs font-body">
-                <span className="flex items-center gap-1.5"><Calendar size={12} />{formattedDate}</span>
-                <span className="flex items-center gap-1.5"><Clock size={12} />{post.readTime} min read</span>
+                <span className="flex items-center gap-1.5"><Calendar aria-hidden="true" size={12} />{formattedDate}</span>
+                <span className="flex items-center gap-1.5"><Clock aria-hidden="true" size={12} />{post.readTime} min read</span>
               </div>
             </div>
           </div>
@@ -58,11 +58,11 @@ export default function BlogCard({ post, featured = false }: BlogCardProps) {
         </p>
         <div className="flex items-center justify-between mt-4 pt-4 border-t border-cream-200">
           <div className="flex items-center gap-3 text-charcoal-700/50 text-xs font-body">
-            <span className="flex items-center gap-1"><Calendar size={11} />{formattedDate}</span>
-            <span className="flex items-center gap-1"><Clock size={11} />{post.readTime} min</span>
+            <span className="flex items-center gap-1"><Calendar aria-hidden="true" size={11} />{formattedDate}</span>
+            <span className="flex items-center gap-1"><Clock aria-hidden="true" size={11} />{post.readTime} min</span>
           </div>
           <span className="flex items-center gap-1 text-gold-500 text-xs font-accent uppercase tracking-wider group-hover:gap-2 transition-all">
-            Read <ArrowRight size={12} />
+            Read <ArrowRight aria-hidden="true" size={12} />
           </span>
         </div>
       </div>
