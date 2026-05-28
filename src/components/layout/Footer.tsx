@@ -26,11 +26,11 @@ export default function Footer() {
             </p>
             {/* Socials */}
             <div className="flex gap-4">
-              <a href={siteConfig.socials.instagram} aria-label="Follow us on Instagram" target="_blank" rel="noopener noreferrer" className="font-accent text-xs tracking-widest text-cream-200 hover:text-gold-400 transition-colors uppercase">
-                Instagram
+              <a href={siteConfig.socials.instagram} aria-label="Follow us on Instagram" target="_blank" rel="noopener noreferrer" className="text-cream-200 hover:text-gold-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
               </a>
-              <a href={siteConfig.socials.facebook} aria-label="Follow us on Facebook" target="_blank" rel="noopener noreferrer" className="font-accent text-xs tracking-widest text-cream-200 hover:text-gold-400 transition-colors uppercase">
-                Facebook
+              <a href={siteConfig.socials.facebook} aria-label="Follow us on Facebook" target="_blank" rel="noopener noreferrer" className="text-cream-200 hover:text-gold-400 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
               </a>
             </div>
           </div>
@@ -82,9 +82,15 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4">
-          <p className="font-body text-xs text-cream-200/50">
-            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-          </p>
+          <div className="flex flex-col md:flex-row items-center gap-2">
+            <p className="font-body text-xs text-cream-200/50">
+              © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            </p>
+            <span className="hidden md:block font-body text-xs text-cream-200/30">·</span>
+            <p className="font-body text-xs text-cream-200/30">
+              Crafted by <span className="text-gold-400/70 hover:text-gold-400 transition-colors">Jomary.dev</span>
+            </p>
+          </div>
           <div className="flex gap-6">
             <Link href="#" className="font-body text-xs text-cream-200/50 hover:text-gold-400 transition-colors">
               Privacy Policy
