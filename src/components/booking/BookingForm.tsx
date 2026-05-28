@@ -88,6 +88,7 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
       if (!paymentIntentId || !clientKey) throw new Error('Invalid payment intent response')
 
       // 2. Tokenise card client-side via PayMongo
+      console.log('Sending card:', paymentData.cardNumber?.replace(/\s/g, ''), 'month:', paymentData.cardExpMonth, 'year:', paymentData.cardExpYear)
       const pmRes = await fetch('https://api.paymongo.com/v1/payment_methods', {
         method: 'POST',
         headers: {
@@ -99,7 +100,7 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
             attributes: {
               type: 'card',
               details: {
-                card_number: paymentData.cardNumber,
+                card_number: paymentData.cardNumber?.replace(/\s/g, ''),
                 exp_month:   parseInt(paymentData.cardExpMonth ?? '0'),
                 exp_year:    parseInt(paymentData.cardExpYear  ?? '0'),
                 cvc:         paymentData.cardCvc,
@@ -115,6 +116,7 @@ export default function BookingForm({ room, initialDates }: BookingFormProps) {
       })
       if (!pmRes.ok) {
         const err = await pmRes.json()
+        console.error('PayMongo card error:', JSON.stringify(err))
         throw new Error(err?.errors?.[0]?.detail ?? 'Card tokenisation failed')
       }
       const pm = await pmRes.json()

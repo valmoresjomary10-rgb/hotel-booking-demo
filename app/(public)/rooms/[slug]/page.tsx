@@ -4,8 +4,10 @@ import { getRoomsFromSupabase, getRoomBySlugFromSupabase } from '@/lib/supabase/
 import { buildRoomMetadata } from '@/lib/seo/metadata'
 import { roomStructuredData, breadcrumbStructuredData } from '@/lib/seo/structuredData'
 import Badge from '@/components/ui/Badge'
+import RoomImageSlideshow from '@/components/rooms/RoomImageSlideshow'
 import Divider from '@/components/ui/Divider'
 import RoomBookingCard from '@/components/rooms/RoomBookingCard'
+import Link from 'next/link'
 
 export const revalidate = 60
 
@@ -34,7 +36,7 @@ export default async function RoomDetailPage({ params }: { params: Promise<{ slu
   const room = await getRoomBySlugFromSupabase(slug)
   if (!room) notFound()
 
-  const roomLD       = roomStructuredData({
+  const roomLD = roomStructuredData({
     name:          room.name,
     description:   room.description,
     images:        room.images,
@@ -42,9 +44,9 @@ export default async function RoomDetailPage({ params }: { params: Promise<{ slu
     slug:          room.slug,
   })
   const breadcrumbLD = breadcrumbStructuredData([
-    { name: 'Home',          href: '/' },
+    { name: 'Home',           href: '/' },
     { name: 'Rooms & Suites', href: '/rooms' },
-    { name: room.name,       href: `/rooms/${room.slug}` },
+    { name: room.name,        href: `/rooms/${room.slug}` },
   ])
 
   return (
@@ -59,33 +61,46 @@ export default async function RoomDetailPage({ params }: { params: Promise<{ slu
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLD) }}
       />
 
-      {/* Hero */}
-      <section className="bg-charcoal-900 h-[60vh] min-h-[400px] relative flex items-end">
-        <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900 via-charcoal-900/40 to-transparent" />
-        <div className="relative z-10 container mx-auto pb-12">
-          <div className="flex gap-2 mb-4">
-            {room.featured && <Badge label="Featured" variant="gold" />}
-            <Badge label="Available" variant="success" />
-          </div>
-          <h1
-            className="font-display text-cream-50 font-light"
-            style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
+      {/* Hero Slideshow */}
+      <div className="relative">
+        {/* Back Button */}
+        <div className="absolute top-16 left-4 z-50">
+          <Link
+            href="/rooms"
+            className="flex items-center gap-2 bg-charcoal-900/60 hover:bg-gold-500 text-cream-50 font-accent text-[10px] uppercase tracking-widest px-4 py-2 transition-all duration-200"
           >
-            {room.name}
-          </h1>
-          <div className="flex items-center gap-6 mt-3">
-            <span className="font-accent text-cream-200/70 text-xs tracking-widest uppercase">{room.size} m²</span>
-            <span className="font-accent text-cream-200/70 text-xs tracking-widest uppercase">Floor {room.floor}</span>
-            <span className="font-accent text-cream-200/70 text-xs tracking-widest uppercase">Up to {room.capacity} guests</span>
-            <div className="flex items-center gap-1">
-              <span className="text-gold-400" aria-hidden="true">★</span>
-              <span className="font-body text-cream-200 text-sm">
-                {room.rating} ({room.reviewCount} reviews)
-              </span>
+            &lsaquo; Back to Rooms
+          </Link>
+        </div>
+
+        <RoomImageSlideshow images={room.images} roomName={room.name} />
+
+        <div className="bg-charcoal-900 px-6 pb-12 pt-6">
+          <div className="container mx-auto">
+            <div className="flex gap-2 mb-4">
+              {room.featured && <Badge label="Featured" variant="gold" />}
+              <Badge label="Available" variant="success" />
+            </div>
+            <h1
+              className="font-display text-cream-50 font-light"
+              style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
+            >
+              {room.name}
+            </h1>
+            <div className="flex items-center gap-6 mt-3">
+              <span className="font-accent text-cream-200/70 text-xs tracking-widest uppercase">{room.size} m²</span>
+              <span className="font-accent text-cream-200/70 text-xs tracking-widest uppercase">Floor {room.floor}</span>
+              <span className="font-accent text-cream-200/70 text-xs tracking-widest uppercase">Up to {room.capacity} guests</span>
+              <div className="flex items-center gap-1">
+                <span className="text-gold-400" aria-hidden="true">★</span>
+                <span className="font-body text-cream-200 text-sm">
+                  {room.rating} ({room.reviewCount} reviews)
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Detail */}
       <section className="py-16 bg-cream-100">

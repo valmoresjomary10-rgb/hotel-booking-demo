@@ -42,7 +42,7 @@ Supabase integration comes in Phase 11.
 | Phase 10 | ✅ | Admin layout + management pages |
 | Phase 11 | ✅ | Supabase integration |
 | Phase 12 | ✅ | PayMongo payment integration |
-| Phase 13 | ⏳ | SEO, performance, accessibility |
+| Phase 13 | ✅ | SEO, performance, accessibility |
 | Phase 14 | ⏳ | Deployment (Vercel) |
 
 ## Phase 7 Notes

@@ -1,12 +1,9 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Room } from '@/types/room'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import { cn } from '@/lib/utils/cn'
-
-const bgColors = [
-  'bg-charcoal-900', 'bg-charcoal-800', 'bg-charcoal-700',
-]
 
 interface RoomCardProps {
   room: Room
@@ -17,7 +14,16 @@ export default function RoomCard({ room, index = 0 }: RoomCardProps) {
   return (
     <article aria-label={room.name} className="group bg-cream-50 shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden">
       {/* Image */}
-      <div className={cn('h-64 relative overflow-hidden', bgColors[index % bgColors.length])}>
+      <Link href={`/rooms/${room.slug}`} className="h-64 relative overflow-hidden bg-charcoal-800 block cursor-pointer" tabIndex={-1} aria-hidden="true">
+        {room.images?.[0] && (
+          <Image
+            src={room.images[0]}
+            alt={room.name}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/70 to-transparent" />
         <div className="absolute top-4 left-4 flex gap-2">
           {room.featured && <Badge label="Featured" variant="gold" />}
@@ -31,7 +37,7 @@ export default function RoomCard({ room, index = 0 }: RoomCardProps) {
             {room.size} m² · {room.bedType} bed · Up to {room.capacity} guests
           </p>
         </div>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-6 space-y-3">

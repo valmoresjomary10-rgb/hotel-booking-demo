@@ -113,11 +113,12 @@ export async function POST(req: NextRequest) {
       console.error('Booking email error:', emailErr)
     }
 
-    // ── Send SMS via Semaphore ────────────────────────────────────────────────
+ // ── Send SMS via Semaphore ────────────────────────────────────────────────
     try {
-      const phone = data.guest_phone?.replace(/\D/g, '') // strip non-digits
+      const phone = data.guest_phone?.replace(/\D/g, '')
       if (phone) {
-        await fetch('https://api.semaphore.co/api/v4/messages', {
+        console.log('Sending SMS to:', phone)
+        const smsRes = await fetch('https://api.semaphore.co/api/v4/messages', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -127,6 +128,8 @@ export async function POST(req: NextRequest) {
             sendername: 'HotelLumiere',
           }),
         })
+        const smsData = await smsRes.json()
+        console.log('Semaphore response:', JSON.stringify(smsData))
       }
     } catch (smsErr) {
       console.error('SMS error:', smsErr)

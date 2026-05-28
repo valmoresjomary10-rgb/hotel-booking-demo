@@ -117,18 +117,16 @@ export default function ContactFormSection() {
                 )
               })}
             </div>
-
             {/* Map */}
             <div className="mt-10 overflow-hidden">
               <iframe
                 title="Hotel Lumiere Location"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDzzhovpqdd5HG64ckbG_ZwWT8bfrpDANc&q=10.1283125,124.3188125&zoom=17"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=124.3168125%2C10.1263125%2C124.3208125%2C10.1303125&layer=mapnik&marker=10.1283125%2C124.3188125"
                 width="100%"
                 height="220"
                 style={{ border: 0, filter: 'grayscale(80%) contrast(1.1)' }}
                 allowFullScreen
                 loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
           </div>

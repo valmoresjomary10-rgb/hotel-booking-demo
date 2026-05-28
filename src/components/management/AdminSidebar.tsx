@@ -4,9 +4,13 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, BedDouble, CalendarCheck, Images,
-  FileText, Tag, CreditCard, LogOut,
+  FileText, Tag, CreditCard, LogOut, Sparkles,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import {
+  LayoutDashboard, BedDouble, CalendarCheck, Images,
+  FileText, Tag, CreditCard, LogOut, Sparkles, Phone,
+} from 'lucide-react'
 
 const navItems = [
   { label: 'Dashboard', href: '/management/dashboard', icon: LayoutDashboard },
@@ -16,6 +20,8 @@ const navItems = [
   { label: 'Content', href: '/management/content', icon: FileText },
   { label: 'Promotions', href: '/management/promotions', icon: Tag },
   { label: 'Payments', href: '/management/payments', icon: CreditCard },
+  { label: 'Amenities', href: '/management/amenities', icon: Sparkles },
+  { label: 'Contact', href: '/management/contact', icon: Phone },
 ]
 
 export default function AdminSidebar() {
