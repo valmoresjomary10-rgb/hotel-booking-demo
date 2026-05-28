@@ -57,7 +57,7 @@ export default function RoomsClient() {
               min={today}
               value={checkIn}
               onChange={e => { setCheckIn(e.target.value); if (checkOut && e.target.value >= checkOut) setCheckOut('') }}
-              className="bg-charcoal-800 border border-charcoal-700 text-cream-50 font-body text-sm px-4 py-2.5 focus:outline-none focus:border-gold-400/50 w-44"
+              className="bg-charcoal-800 border border-charcoal-700 text-cream-50 font-body text-sm px-4 py-2.5 focus:outline-none focus:border-gold-400/50 w-44 [color-scheme:dark]"
             />
           </div>
           <div className="flex flex-col items-start">
@@ -68,7 +68,7 @@ export default function RoomsClient() {
               min={checkIn || today}
               value={checkOut}
               onChange={e => setCheckOut(e.target.value)}
-              className="bg-charcoal-800 border border-charcoal-700 text-cream-50 font-body text-sm px-4 py-2.5 focus:outline-none focus:border-gold-400/50 w-44"
+              className="bg-charcoal-800 border border-charcoal-700 text-cream-50 font-body text-sm px-4 py-2.5 focus:outline-none focus:border-gold-400/50 w-44 [color-scheme:dark]"
             />
           </div>
           {(checkIn || checkOut) && (
