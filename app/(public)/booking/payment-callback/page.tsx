@@ -25,11 +25,11 @@ function PaymentCallbackContent() {
         try {
           const res = await fetch('/api/bookings')
           const bookings = await res.json()
+          // Match by email and name regardless of payment_status (webhook updates it later)
           const match = bookings.find(
-            (b: { guest_email: string; guest_first_name: string; payment_status: string; confirmation_code: string }) =>
+            (b: { guest_email: string; guest_first_name: string; confirmation_code: string }) =>
               b.guest_email      === email &&
-              b.guest_first_name === firstName &&
-              b.payment_status   === 'paid'
+              b.guest_first_name === firstName
           )
           if (match) {
             router.replace(`/booking/confirmation?code=${match.confirmation_code}`)
