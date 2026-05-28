@@ -16,9 +16,9 @@ export async function POST(request: Request) {
 
     await brevo.transactionalEmails.sendTransacEmail({
       subject: `[Contact Form] ${subject} — ${firstName} ${lastName}`,
-      to: [{ email: 'your@email.com', name: 'Hotel Lumière' }],
+      to: [{ email: 'valmoresjomary10@gmail.com', name: 'Hotel Lumière' }],
       replyTo: { email, name: `${firstName} ${lastName}` },
-      sender: { name: 'Hotel Lumière Website', email: 'noreply@hotellumiere.com' },
+      sender: { name: 'Hotel Lumière Website', email: 'valmoresjomary10@gmail.com' },
       htmlContent: `
         <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #1a1a1a;">
           <div style="border-bottom: 2px solid #c49a3a; padding-bottom: 20px; margin-bottom: 30px;">
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     await brevo.transactionalEmails.sendTransacEmail({
       subject: `We've Received Your Message — Hotel Lumière`,
       to: [{ email, name: `${firstName} ${lastName}` }],
-      sender: { name: 'Hotel Lumière', email: 'noreply@hotellumiere.com' },
+      sender: { name: 'Hotel Lumière', email: 'valmoresjomary10@gmail.com' },
       htmlContent: `
         <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #1a1a1a;">
           <div style="border-bottom: 2px solid #c49a3a; padding-bottom: 20px; margin-bottom: 30px;">
