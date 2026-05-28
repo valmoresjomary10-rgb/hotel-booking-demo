@@ -2,25 +2,40 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { rooms as initialRooms } from '@/constants/roomData'
-import { Room } from '@/types/room'
 import { Plus, Pencil, Trash2, BedDouble } from 'lucide-react'
+
+type Room = {
+  id: string
+  name: string
+  slug: string
+  size: number
+  floor: number
+  bedType: string
+  pricePerNight: number
+  capacity: number
+  status: string
+  featured: boolean
+}
 
 export default function ManageRoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([])
-  const [deleting, setDeleting] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const stored = localStorage.getItem('lum_rooms')
-    setRooms(stored ? JSON.parse(stored) : initialRooms)
-  }, [])
+  const fetchRooms = async () => {
+    setLoading(true)
+    const res = await fetch('/api/rooms')
+    const data = await res.json()
+    setRooms(Array.isArray(data) ? data : [])
+    setLoading(false)
+  }
 
-  const handleDelete = (id: string) => {
+  useEffect(() => { fetchRooms() }, [])
+
+  const handleDelete = async (id: string) => {
     if (!confirm('Delete this room? This cannot be undone.')) return
-    const updated = rooms.filter(r => r.id !== id)
-    setRooms(updated)
-    localStorage.setItem('lum_rooms', JSON.stringify(updated))
-    setDeleting(null)
+    const res = await fetch(`/api/rooms/${id}`, { method: 'DELETE' })
+    if (res.ok) fetchRooms()
+    else alert('Failed to delete room.')
   }
 
   const statusColor = (status: string) => {
@@ -58,14 +73,11 @@ export default function ManageRoomsPage() {
             </tr>
           </thead>
           <tbody>
-            {rooms.length === 0 && (
-              <tr>
-                <td colSpan={7} className="px-6 py-12 text-center font-body text-sm text-charcoal-700/40">
-                  No rooms found.
-                </td>
-              </tr>
-            )}
-            {rooms.map(room => (
+            {loading ? (
+              <tr><td colSpan={7} className="px-6 py-12 text-center font-body text-sm text-charcoal-700/40">Loading...</td></tr>
+            ) : rooms.length === 0 ? (
+              <tr><td colSpan={7} className="px-6 py-12 text-center font-body text-sm text-charcoal-700/40">No rooms found.</td></tr>
+            ) : rooms.map(room => (
               <tr key={room.id} className="border-b border-cream-200 last:border-0 hover:bg-cream-50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
@@ -79,7 +91,7 @@ export default function ManageRoomsPage() {
                   </div>
                 </td>
                 <td className="px-6 py-4 font-body text-sm text-charcoal-700/70 capitalize">{room.bedType}</td>
-                <td className="px-6 py-4 font-body text-sm text-charcoal-900">₱{room.pricePerNight.toLocaleString()}</td>
+                <td className="px-6 py-4 font-body text-sm text-charcoal-900">₱{Number(room.pricePerNight).toLocaleString()}</td>
                 <td className="px-6 py-4 font-body text-sm text-charcoal-700/70">{room.capacity} guests</td>
                 <td className="px-6 py-4">
                   <span className={`font-accent text-[9px] uppercase tracking-widest px-2 py-1 ${statusColor(room.status)}`}>
@@ -91,16 +103,10 @@ export default function ManageRoomsPage() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2 justify-end">
-                    <Link
-                      href={`/management/rooms/${room.id}`}
-                      className="p-2 text-charcoal-700/40 hover:text-gold-500 transition-colors"
-                    >
+                    <Link href={`/management/rooms/${room.id}`} className="p-2 text-charcoal-700/40 hover:text-gold-500 transition-colors">
                       <Pencil size={14} />
                     </Link>
-                    <button
-                      onClick={() => handleDelete(room.id)}
-                      className="p-2 text-charcoal-700/40 hover:text-red-500 transition-colors"
-                    >
+                    <button onClick={() => handleDelete(room.id)} className="p-2 text-charcoal-700/40 hover:text-red-500 transition-colors">
                       <Trash2 size={14} />
                     </button>
                   </div>

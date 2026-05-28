@@ -26,12 +26,13 @@ interface FieldProps {
   error?: string
   icon: React.ReactNode
   children: React.ReactNode
+  id: string
 }
 
-function Field({ label, error, icon, children }: FieldProps) {
+function Field({ label, error, icon, children, id }: FieldProps) {
   return (
     <div className="space-y-2">
-      <label className="block text-xs tracking-widest uppercase font-accent text-gold-400">
+      <label htmlFor={id} className="block text-xs tracking-widest uppercase font-accent text-gold-400">
         {label}
       </label>
       <div className="relative">
@@ -40,7 +41,7 @@ function Field({ label, error, icon, children }: FieldProps) {
         </div>
         {children}
       </div>
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p id={`${id}-error`} role="alert" className="text-xs text-red-400">{error}</p>}
     </div>
   )
 }
@@ -76,17 +77,21 @@ export default function BookingGuestInfoForm({
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Name row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <Field label="First Name" error={errors.firstName?.message} icon={<User className="h-4 w-4" />}>
+        <Field id="firstName" label="First Name" error={errors.firstName?.message} icon={<User className="h-4 w-4" />}>
           <input
+            id="firstName"
             type="text"
+            aria-describedby={errors.firstName ? 'firstName-error' : undefined}
             placeholder="Juan"
             {...register('firstName')}
             className={inputClass(!!errors.firstName)}
           />
         </Field>
-        <Field label="Last Name" error={errors.lastName?.message} icon={<User className="h-4 w-4" />}>
+        <Field id="lastName" label="Last Name" error={errors.lastName?.message} icon={<User className="h-4 w-4" />}>
           <input
+            id="lastName"
             type="text"
+            aria-describedby={errors.lastName ? 'lastName-error' : undefined}
             placeholder="dela Cruz"
             {...register('lastName')}
             className={inputClass(!!errors.lastName)}
@@ -95,9 +100,11 @@ export default function BookingGuestInfoForm({
       </div>
 
       {/* Email */}
-      <Field label="Email Address" error={errors.email?.message} icon={<Mail className="h-4 w-4" />}>
+      <Field id="email" label="Email Address" error={errors.email?.message} icon={<Mail className="h-4 w-4" />}>
         <input
+          id="email"
           type="email"
+          aria-describedby={errors.email ? 'email-error' : undefined}
           placeholder="juan@example.com"
           {...register('email')}
           className={inputClass(!!errors.email)}
@@ -106,16 +113,20 @@ export default function BookingGuestInfoForm({
 
       {/* Phone + Country */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <Field label="Phone Number" error={errors.phone?.message} icon={<Phone className="h-4 w-4" />}>
+        <Field id="phone" label="Phone Number" error={errors.phone?.message} icon={<Phone className="h-4 w-4" />}>
           <input
+            id="phone"
             type="tel"
+            aria-describedby={errors.phone ? 'phone-error' : undefined}
             placeholder="+63 917 000 0000"
             {...register('phone')}
             className={inputClass(!!errors.phone)}
           />
         </Field>
-        <Field label="Country" error={errors.country?.message} icon={<Globe className="h-4 w-4" />}>
+        <Field id="country" label="Country" error={errors.country?.message} icon={<Globe className="h-4 w-4" />}>
           <select
+            id="country"
+            aria-describedby={errors.country ? 'country-error' : undefined}
             {...register('country')}
             className={`${inputClass(!!errors.country)} appearance-none`}
           >
@@ -156,6 +167,7 @@ export default function BookingGuestInfoForm({
       <div className="flex gap-4 pt-2">
         <button
           type="button"
+          aria-label="Go back to date selection"
           onClick={onBack}
           className="flex items-center gap-2 border border-charcoal-700 hover:border-gold-500/40
             text-cream-200 font-accent text-xs tracking-widest uppercase py-4 px-6
@@ -166,6 +178,7 @@ export default function BookingGuestInfoForm({
         </button>
         <button
           type="submit"
+          aria-label="Proceed to review booking"
           className="flex-1 flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400
             text-charcoal-900 font-accent text-xs tracking-widest uppercase py-4 px-6
             transition-colors duration-200 rounded-sm"

@@ -34,7 +34,7 @@ export default function OfferCard({ offer, featured = false }: OfferCardProps) {
               <p className="font-body text-cream-200/70 text-sm leading-relaxed">{offer.description}</p>
               <div className="flex items-center gap-4 mt-6">
                 {offer.discount > 0 && (
-                  <span className="font-body text-cream-200/40 line-through text-sm">₱{offer.originalPrice.toLocaleString()}</span>
+                  <span className="font-body text-cream-200/40 line-through text-sm" aria-label={`Original price ₱${offer.originalPrice.toLocaleString()}`}>₱{offer.originalPrice.toLocaleString()}</span>
                 )}
                 <span className="font-display text-3xl text-gold-400">₱{offer.packagePrice.toLocaleString()}</span>
                 {offer.discount > 0 && (
@@ -88,7 +88,7 @@ export default function OfferCard({ offer, featured = false }: OfferCardProps) {
         <div className="mt-4 pt-4 border-t border-cream-200 flex items-center justify-between">
           <div>
             {offer.discount > 0 && (
-              <span className="font-body text-charcoal-700/40 line-through text-xs block">₱{offer.originalPrice.toLocaleString()}</span>
+              <span className="font-body text-charcoal-700/40 line-through text-xs block" aria-label={`Original price ₱${offer.originalPrice.toLocaleString()}`}>₱{offer.originalPrice.toLocaleString()}</span>
             )}
             <span className="font-display text-2xl text-gold-500">₱{offer.packagePrice.toLocaleString()}</span>
           </div>

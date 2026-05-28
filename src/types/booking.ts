@@ -55,7 +55,6 @@ export interface BookingFormState {
   step: 1 | 2 | 3
   roomId: string
   roomName: string
-  roomName: string
   roomSlug: string
   roomImage: string
   pricePerNight: number

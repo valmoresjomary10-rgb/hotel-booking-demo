@@ -8,7 +8,7 @@ const contactInfo = [
     icon: MapPin,
     label: 'Address',
     value: '123 Grand Avenue, Manila, Philippines',
-    href: 'https://maps.google.com/?q=Manila+Philippines',
+    href: 'https://maps.google.com/?q=10.1283125,124.3188125',
     external: true,
   },
   {
@@ -117,18 +117,16 @@ export default function ContactFormSection() {
                 )
               })}
             </div>
-
             {/* Map */}
             <div className="mt-10 overflow-hidden">
               <iframe
                 title="Hotel Lumiere Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123.456!2d120.9842!3d14.5995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397ca03571ec38b%3A0x69d1d9a9a2a3b8cd!2sManila%2C%20Metro%20Manila!5e0!3m2!1sen!2sph!4v1234567890"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=124.3168125%2C10.1263125%2C124.3208125%2C10.1303125&layer=mapnik&marker=10.1283125%2C124.3188125"
                 width="100%"
                 height="220"
                 style={{ border: 0, filter: 'grayscale(80%) contrast(1.1)' }}
                 allowFullScreen
                 loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
           </div>
@@ -144,7 +142,7 @@ export default function ContactFormSection() {
             <div className="mt-5 h-px w-16 bg-gold-400" />
 
             {formState === 'success' && (
-              <div className="mt-8 flex items-start gap-4 border border-gold-400/40 bg-gold-400/5 p-6">
+              <div role="alert" aria-live="polite" className="mt-8 flex items-start gap-4 border border-gold-400/40 bg-gold-400/5 p-6">
                 <CheckCircle className="mt-0.5 shrink-0 text-gold-500" size={20} strokeWidth={1.5} />
                 <div>
                   <p className="font-display text-lg text-charcoal-900">Message Sent</p>
@@ -156,7 +154,7 @@ export default function ContactFormSection() {
             )}
 
             {formState === 'error' && (
-              <div className="mt-8 flex items-start gap-4 border border-red-300 bg-red-50 p-6">
+              <div role="alert" aria-live="assertive" className="mt-8 flex items-start gap-4 border border-red-300 bg-red-50 p-6">
                 <AlertCircle className="mt-0.5 shrink-0 text-red-500" size={20} strokeWidth={1.5} />
                 <div>
                   <p className="font-display text-lg text-charcoal-900">Something went wrong</p>
@@ -171,10 +169,11 @@ export default function ContactFormSection() {
               <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="firstName" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       First Name <span className="text-gold-500">*</span>
                     </label>
                     <input
+                      id="firstName"
                       type="text"
                       name="firstName"
                       required
@@ -185,10 +184,11 @@ export default function ContactFormSection() {
                     />
                   </div>
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="lastName" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       Last Name <span className="text-gold-500">*</span>
                     </label>
                     <input
+                      id="lastName"
                       type="text"
                       name="lastName"
                       required
@@ -202,10 +202,11 @@ export default function ContactFormSection() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="email" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       Email <span className="text-gold-500">*</span>
                     </label>
                     <input
+                      id="email"
                       type="email"
                       name="email"
                       required
@@ -216,10 +217,11 @@ export default function ContactFormSection() {
                     />
                   </div>
                   <div>
-                    <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                    <label htmlFor="phone" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                       Phone
                     </label>
                     <input
+                      id="phone"
                       type="tel"
                       name="phone"
                       value={formData.phone}
@@ -231,10 +233,11 @@ export default function ContactFormSection() {
                 </div>
 
                 <div>
-                  <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                  <label htmlFor="subject" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                     Subject <span className="text-gold-500">*</span>
                   </label>
                   <select
+                    id="subject"
                     name="subject"
                     required
                     value={formData.subject}
@@ -252,10 +255,11 @@ export default function ContactFormSection() {
                 </div>
 
                 <div>
-                  <label className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
+                  <label htmlFor="message" className="font-accent text-[10px] uppercase tracking-widest text-charcoal-700/50">
                     Message <span className="text-gold-500">*</span>
                   </label>
                   <textarea
+                    id="message"
                     name="message"
                     required
                     rows={5}
@@ -273,8 +277,8 @@ export default function ContactFormSection() {
                 >
                   {formState === 'loading' ? (
                     <>
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-charcoal-900 border-t-transparent" />
-                      Sending...
+                      <span role="status" aria-label="Sending message" className="h-4 w-4 animate-spin rounded-full border-2 border-charcoal-900 border-t-transparent" />
+                      <span aria-hidden="true">Sending...</span>
                     </>
                   ) : (
                     <>

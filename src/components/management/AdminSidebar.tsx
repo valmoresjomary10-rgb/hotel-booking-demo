@@ -4,9 +4,13 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, BedDouble, CalendarCheck, Images,
-  FileText, Tag, CreditCard, LogOut,
+  FileText, Tag, CreditCard, LogOut, Sparkles,
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import {
+  LayoutDashboard, BedDouble, CalendarCheck, Images,
+  FileText, Tag, CreditCard, LogOut, Sparkles, Phone,
+} from 'lucide-react'
 
 const navItems = [
   { label: 'Dashboard', href: '/management/dashboard', icon: LayoutDashboard },
@@ -16,6 +20,8 @@ const navItems = [
   { label: 'Content', href: '/management/content', icon: FileText },
   { label: 'Promotions', href: '/management/promotions', icon: Tag },
   { label: 'Payments', href: '/management/payments', icon: CreditCard },
+  { label: 'Amenities', href: '/management/amenities', icon: Sparkles },
+  { label: 'Contact', href: '/management/contact', icon: Phone },
 ]
 
 export default function AdminSidebar() {
@@ -42,10 +48,11 @@ export default function AdminSidebar() {
             const active = pathname === href || pathname.startsWith(href + '/')
             return (
               <Link key={href} href={href}
+                aria-current={active ? 'page' : undefined}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-body transition-colors ${
                   active ? 'bg-gold-500/10 text-gold-400' : 'text-cream-200/50 hover:text-cream-200 hover:bg-charcoal-800'
                 }`}>
-                <Icon size={16} className={active ? 'text-gold-400' : ''} />
+                <Icon aria-hidden="true" size={16} className={active ? 'text-gold-400' : ''} />
                 {label}
               </Link>
             )
@@ -53,8 +60,9 @@ export default function AdminSidebar() {
         </nav>
         <div className="px-3 py-4 border-t border-charcoal-700">
           <button onClick={() => setShowConfirm(true)}
+            aria-label="Sign out of management panel"
             className="flex items-center gap-3 px-3 py-2.5 w-full text-sm font-body text-cream-200/40 hover:text-cream-200/70 transition-colors">
-            <LogOut size={16} />
+            <LogOut aria-hidden="true" size={16} />
             Sign Out
           </button>
         </div>
@@ -67,17 +75,19 @@ export default function AdminSidebar() {
           <div className="absolute inset-0 bg-charcoal-900/80 backdrop-blur-sm"
             onClick={() => setShowConfirm(false)} />
           {/* Modal */}
-          <div className="relative bg-charcoal-800 border border-charcoal-700 p-8 w-full max-w-sm mx-4">
-            <h3 className="font-display text-xl text-cream-50 mb-2">Sign Out</h3>
+          <div role="dialog" aria-modal="true" aria-labelledby="signout-title" className="relative bg-charcoal-800 border border-charcoal-700 p-8 w-full max-w-sm mx-4">
+            <h3 id="signout-title" className="font-display text-xl text-cream-50 mb-2">Sign Out</h3>
             <p className="font-body text-sm text-cream-200/60 mb-8">
               Are you sure you want to sign out of the management panel?
             </p>
             <div className="flex gap-3">
               <button onClick={() => setShowConfirm(false)}
+                aria-label="Cancel sign out"
                 className="flex-1 border border-charcoal-700 text-cream-200/60 hover:text-cream-200 font-accent text-[10px] uppercase tracking-widest py-3 transition-colors">
                 Cancel
               </button>
               <button onClick={handleSignOut}
+                aria-label="Confirm sign out"
                 className="flex-1 bg-gold-500 hover:bg-gold-400 text-charcoal-900 font-accent text-[10px] uppercase tracking-widest py-3 transition-colors">
                 Yes, Sign Out
               </button>

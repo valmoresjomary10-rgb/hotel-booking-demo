@@ -3,7 +3,6 @@ export const publicNavLinks = [
   { label: 'Amenities', href: '/amenities' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Offers', href: '/offers' },
-  { label: 'Blog', href: '/blog' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
 ]
