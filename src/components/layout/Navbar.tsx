@@ -38,7 +38,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <Link href="/" className="flex flex-col leading-none group" aria-label="Hotel Lumière — Home">
-            <span className="font-accent text-xl tracking-widest text-charcoal-900 group-hover:text-gold-500 transition-colors">
+            <span className={cn('font-accent text-xl tracking-widest transition-colors group-hover:text-gold-500', scrolled ? 'text-charcoal-900' : 'text-cream-50')}>
               {siteConfig.name}
             </span>
             <span className="font-body text-xs tracking-wider text-gold-500 uppercase">
@@ -53,20 +53,17 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 aria-current={pathname === link.href ? 'page' : undefined}
-                className="font-body text-sm text-charcoal-700 hover:text-gold-500 transition-colors tracking-wide relative group focus-visible:outline-none focus-visible:text-gold-500"
+                className={cn(
+  'font-body text-sm transition-colors tracking-wide relative group focus-visible:outline-none focus-visible:text-gold-500',
+  scrolled ? 'text-charcoal-700 hover:text-gold-500' : 'text-cream-50 hover:text-gold-400',
+  pathname === link.href && 'text-gold-500'
+)}
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-gold-400 group-hover:w-full transition-all duration-300" />
+                <span className={cn('absolute -bottom-1 left-0 h-px bg-gold-400 transition-all duration-300', pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full')} />
               </Link>
             ))}
           </nav>
-
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-4">
-            <Link href="/booking">
-              <Button variant="primary" size="sm">Book Now</Button>
-            </Link>
-          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -76,10 +73,10 @@ export default function Navbar() {
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
           >
-            <span className={cn('w-6 h-px bg-charcoal-900 transition-all duration-300', menuOpen && 'rotate-45 translate-y-2')} />
-            <span className={cn('w-6 h-px bg-charcoal-900 transition-all duration-300', menuOpen && 'opacity-0')} />
-            <span className={cn('w-6 h-px bg-charcoal-900 transition-all duration-300', menuOpen && '-rotate-45 -translate-y-2')} />
-          </button>
+            <span className={cn('w-6 h-px transition-all duration-300', scrolled ? 'bg-charcoal-900' : 'bg-cream-50', menuOpen && 'rotate-45 translate-y-2')} />
+            <span className={cn('w-6 h-px transition-all duration-300', scrolled ? 'bg-charcoal-900' : 'bg-cream-50', menuOpen && 'rotate-45 translate-y-2')} />
+            <span className={cn('w-6 h-px transition-all duration-300', scrolled ? 'bg-charcoal-900' : 'bg-cream-50', menuOpen && 'rotate-45 translate-y-2')} />
+                      </button>
         </div>
 
         {/* Mobile Menu */}
@@ -102,9 +99,6 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <Link href="/booking" className="mt-2">
-            <Button variant="primary" size="md" className="w-full">Book Now</Button>
-          </Link>
         </nav>
       </header>
     </>
