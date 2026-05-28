@@ -85,15 +85,18 @@ export default function Navbar() {
           aria-label="Mobile navigation"
           aria-hidden={!menuOpen}
           className={cn(
-            'lg:hidden bg-cream-50 border-t border-cream-200 px-6 py-6 flex flex-col gap-4',
-            menuOpen ? 'block' : 'hidden'
+            'lg:hidden bg-cream-50 border-t border-cream-200 px-6 py-6',
+            menuOpen ? 'flex flex-col gap-4' : 'hidden'
           )}
         >
           {publicNavLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="font-body text-charcoal-700 hover:text-gold-500 transition-colors py-2 border-b border-cream-200 focus-visible:outline-none focus-visible:text-gold-500"
+              className={cn(
+                'font-body transition-colors py-2 border-b border-cream-200 focus-visible:outline-none focus-visible:text-gold-500',
+                pathname === link.href ? 'text-gold-500' : 'text-charcoal-700 hover:text-gold-500'
+              )}
               onClick={() => setMenuOpen(false)}
             >
               {link.label}
