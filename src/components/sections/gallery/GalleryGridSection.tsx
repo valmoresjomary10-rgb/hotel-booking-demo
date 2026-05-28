@@ -80,13 +80,13 @@ export default function GalleryGridSection() {
           role="dialog"
           aria-modal="true"
           aria-label="Image lightbox"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal-900/95"
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-charcoal-900/95"
           onClick={closeLightbox}
         >
           {/* Close */}
           <button
             aria-label="Close lightbox"
-            className="absolute right-6 top-6 text-cream-200/60 transition-colors hover:text-gold-400"
+            className="absolute right-6 top-20 text-cream-200/60 transition-colors hover:text-gold-400"
             onClick={closeLightbox}
           >
             <X size={28} strokeWidth={1.5} />
