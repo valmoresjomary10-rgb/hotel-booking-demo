@@ -1,9 +1,104 @@
+/* ============================================
+   HOTEL LUMIÈRE — DESIGN TOKENS
+   Scandinavian / Boutique Refresh
+   ============================================ */
+
 :root {
-  --color-gold-400: #d4aa5f;
-  --color-gold-500: #c49a3a;
-  --color-charcoal-900: #0f0f0f;
-  --color-cream-100: #f9f6f1;
-  --font-display: 'Cormorant Garamond', serif;
-  --font-body: 'Jost', sans-serif;
-  --font-accent: 'Cinzel', serif;
+
+  /* --- Colors: Primary Blue --- */
+  --color-blue-50:  #f0f7ff;
+  --color-blue-100: #e0efff;
+  --color-blue-200: #baddff;
+  --color-blue-300: #7cc2ff;
+  --color-blue-400: #3aa0f5;
+  --color-blue-500: #1a82e0;
+  --color-blue-600: #1166c0;
+
+  /* --- Colors: Sage Green --- */
+  --color-sage-50:  #f4f7f4;
+  --color-sage-100: #e6ede6;
+  --color-sage-200: #c8d9c8;
+  --color-sage-300: #9bbc9b;
+  --color-sage-400: #6a9e6a;
+  --color-sage-500: #4d824d;
+
+  /* --- Colors: Warm Gray --- */
+  --color-gray-50:  #fafafa;
+  --color-gray-100: #f5f5f4;
+  --color-gray-200: #e8e8e6;
+  --color-gray-300: #d4d4d0;
+  --color-gray-400: #a8a8a3;
+  --color-gray-500: #737370;
+  --color-gray-600: #525250;
+  --color-gray-700: #3a3a38;
+  --color-gray-800: #262624;
+  --color-gray-900: #161614;
+
+  /* --- Colors: Base --- */
+  --color-white:  #ffffff;
+  --color-cream:  #fdfcfb;
+
+  /* --- Semantic Tokens --- */
+  --color-bg-primary:    var(--color-white);
+  --color-bg-secondary:  var(--color-gray-50);
+  --color-bg-soft:       var(--color-blue-50);
+  --color-bg-sage:       var(--color-sage-50);
+
+  --color-text-primary:   var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-muted:     var(--color-gray-400);
+  --color-text-inverse:   var(--color-white);
+
+  --color-border:         var(--color-gray-200);
+  --color-border-soft:    var(--color-gray-100);
+
+  --color-accent-primary: var(--color-blue-500);
+  --color-accent-hover:   var(--color-blue-600);
+  --color-accent-light:   var(--color-blue-50);
+
+  --color-accent-sage:       var(--color-sage-400);
+  --color-accent-sage-light: var(--color-sage-50);
+
+  /* --- Typography --- */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'Inter', sans-serif;
+  --font-accent:  'DM Sans', sans-serif;
+
+  /* --- Spacing Scale --- */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.25rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* --- Border Radius --- */
+  --radius-sm:  0.5rem;
+  --radius-md:  0.75rem;
+  --radius-lg:  1rem;
+  --radius-xl:  1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 4px 0 rgba(0,0,0,0.05);
+  --shadow-md: 0 2px 12px 0 rgba(0,0,0,0.07);
+  --shadow-lg: 0 4px 24px 0 rgba(0,0,0,0.08);
+  --shadow-xl: 0 8px 40px 0 rgba(0,0,0,0.10);
+
+  /* --- Transitions --- */
+  --transition-fast:   150ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-base:   250ms cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow:   400ms cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* --- Layout --- */
+  --max-width-content: 1280px;
+  --max-width-text:    720px;
+  --navbar-height:     72px;
 }
