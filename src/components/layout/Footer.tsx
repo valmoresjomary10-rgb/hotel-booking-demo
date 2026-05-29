@@ -37,8 +37,7 @@ export default function Footer() {
                 href={siteConfig.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400
-                           hover:text-blue-500 hover:border-blue-200 transition-all duration-200"
+                className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 transition-all duration-200"
                 aria-label="Instagram"
               >
                 <Instagram size={16} />
