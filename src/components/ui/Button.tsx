@@ -13,17 +13,26 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     <button
       ref={ref}
       className={cn(
-        'inline-flex items-center justify-center font-accent tracking-widest uppercase transition-all duration-300',
+        'inline-flex items-center justify-center font-medium rounded-xl transition-all duration-200',
         'disabled:opacity-50 disabled:cursor-not-allowed',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2',
         {
-          'bg-gold-500 text-cream-50 hover:bg-gold-600': variant === 'primary',
-          'bg-charcoal-900 text-cream-50 hover:bg-charcoal-800': variant === 'secondary',
-          'bg-transparent text-charcoal-900 hover:text-gold-500': variant === 'ghost',
-          'border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-cream-50': variant === 'outline',
+          // Primary — blue
+          'bg-blue-500 text-white hover:bg-blue-600 shadow-soft hover:shadow-soft-md hover:-translate-y-0.5':
+            variant === 'primary',
+          // Secondary — white outlined
+          'bg-white text-gray-800 border border-gray-200 hover:border-blue-300 hover:text-blue-500 shadow-soft-sm':
+            variant === 'secondary',
+          // Ghost — transparent
+          'bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900':
+            variant === 'ghost',
+          // Outline — blue outlined
+          'border border-blue-400 text-blue-500 hover:bg-blue-500 hover:text-white':
+            variant === 'outline',
+          // Sizes
           'text-xs px-4 py-2': size === 'sm',
           'text-sm px-6 py-3': size === 'md',
-          'text-base px-8 py-4': size === 'lg',
+          'text-base px-8 py-4 w-full justify-center': size === 'lg',
         },
         className
       )}
