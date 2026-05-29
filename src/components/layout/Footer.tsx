@@ -125,7 +125,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Phone size={15} className="text-blue-400 shrink-0" />
                 
-                  href={`tel:${siteConfig.phone}`}
+                  <a href={`tel:${siteConfig.phone}`}
                   className="text-sm text-gray-600 hover:text-blue-500 transition-colors"
                 >
                   {siteConfig.phone}
@@ -134,7 +134,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Mail size={15} className="text-blue-400 shrink-0" />
                 
-                  href={`mailto:${siteConfig.email}`}
+                  <a href={`mailto:${siteConfig.email}`}
                   className="text-sm text-gray-600 hover:text-blue-500 transition-colors"
                 >
                   {siteConfig.email}
