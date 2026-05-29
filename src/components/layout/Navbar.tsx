@@ -64,10 +64,9 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   className={`
-                    relative px-4 py-2 rounded-lg text-sm font-medium
-                    transition-all duration-200
-                    style={{ fontFamily: 'var(--font-accent)' }}
-                    ${isActive
+  relative px-4 py-2 rounded-lg text-sm font-medium
+  transition-all duration-200
+  ${isActive
                       ? 'text-blue-500 bg-blue-50'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                     }
