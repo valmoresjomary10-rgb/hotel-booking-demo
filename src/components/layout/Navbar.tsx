@@ -84,10 +84,10 @@ export default function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
             <Link
-              href="/rooms"
+              href="/contact"
               className="btn-primary text-sm px-5 py-2.5"
             >
-              Book a Room
+              Contact Us
             </Link>
           </div>
 
@@ -162,10 +162,10 @@ export default function Navbar() {
         {/* Drawer CTA */}
         <div className="px-4 pt-2">
           <Link
-            href="/rooms"
+            href="/contact"
             className="btn-primary w-full text-sm justify-center"
           >
-            Book a Room
+            Contact Us
           </Link>
         </div>
 
