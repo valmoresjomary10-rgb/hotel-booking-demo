@@ -55,7 +55,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-1 ml-auto mr-3">
             {publicNavLinks.map((link) => {
               const isActive = pathname === link.href ||
                 (link.href !== '/' && pathname.startsWith(link.href))
