@@ -1,50 +1,84 @@
-import Link from 'next/link'
-import Button from '@/components/ui/Button'
-import Divider from '@/components/ui/Divider'
+import {
+  Wifi, Car, Utensils, Waves, Dumbbell, Wind,
+  Coffee, Shield, Clock, Baby, TreePine, Sparkles
+} from 'lucide-react'
 
 const amenities = [
-  { icon: '🏊', title: 'Infinity Pool', description: 'Rooftop pool with panoramic city views' },
-  { icon: '🍽️', title: 'Fine Dining', description: 'Award-winning restaurant and bar' },
-  { icon: '💆', title: 'Lumière Spa', description: 'Full-service spa and wellness center' },
-  { icon: '🏋️', title: 'Fitness Center', description: '24/7 state-of-the-art gym facilities' },
-  { icon: '🚗', title: 'Valet Parking', description: 'Complimentary valet for all guests' },
-  { icon: '✈️', title: 'Airport Transfer', description: 'Private luxury transfers on request' },
+  { icon: Wifi,      label: 'Free Wi-Fi',        desc: 'High-speed in all rooms'     },
+  { icon: Car,       label: 'Free Parking',       desc: 'Secure on-site parking'      },
+  { icon: Utensils,  label: 'Restaurant',         desc: 'Filipino & international'    },
+  { icon: Waves,     label: 'Swimming Pool',      desc: 'Open 6am – 10pm daily'       },
+  { icon: Dumbbell,  label: 'Fitness Center',     desc: 'Modern equipment'            },
+  { icon: Wind,      label: 'Air Conditioning',   desc: 'Climate-controlled rooms'    },
+  { icon: Coffee,    label: 'Breakfast Included', desc: 'Fresh daily buffet'          },
+  { icon: Shield,    label: '24/7 Security',      desc: 'Your safety is our priority' },
+  { icon: Clock,     label: '24/7 Front Desk',    desc: 'Always here to help'         },
+  { icon: Baby,      label: 'Family Friendly',    desc: 'Kids welcome & catered for'  },
+  { icon: TreePine,  label: 'Garden & Terrace',   desc: 'Relax in nature'             },
+  { icon: Sparkles,  label: 'Daily Housekeeping', desc: 'Fresh rooms every day'       },
 ]
 
 export default function AmenitiesHighlightSection() {
   return (
-    <section className="py-24 bg-charcoal-900">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="font-accent text-gold-400 text-xs tracking-[0.3em] uppercase mb-4">
-            Experience
-          </p>
-          <h2 className="font-display text-cream-50 font-light"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
-            World-Class Amenities
+    <section className="section-padding bg-gray-50">
+      <div className="section-wrapper">
+
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <p className="section-label">Amenities</p>
+          <h2 className="section-heading">
+            Everything You Need
           </h2>
-          <Divider ornamental className="mt-6 opacity-40" />
+          <p className="section-subheading mx-auto text-center">
+            We've thought of everything so you can focus on
+            enjoying your stay.
+          </p>
         </div>
 
-        {/* Grid */}
-        <ul className="grid grid-cols-2 md:grid-cols-3 gap-8 list-none p-0">
-          {amenities.map((item) => (
-            <li key={item.title} className="group text-center p-8 border border-charcoal-700 hover:border-gold-500/50 transition-all duration-300">
-              <div className="text-4xl mb-4" aria-hidden="true">{item.icon}</div>
-              <h3 className="font-accent text-cream-50 text-sm tracking-widest uppercase mb-2">{item.title}</h3>
-              <p className="font-body text-cream-200/60 text-sm leading-relaxed">{item.description}</p>
-            </li>
+        {/* Amenities Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          {amenities.map(({ icon: Icon, label, desc }) => (
+            <div
+              key={label}
+              className="bg-white rounded-2xl p-5 flex flex-col gap-3
+                         border border-gray-100 hover:border-blue-100
+                         hover:shadow-soft transition-all duration-200 group"
+            >
+              {/* Icon */}
+              <div
+                className="w-10 h-10 rounded-xl flex items-center justify-center
+                           bg-blue-50 group-hover:bg-blue-100 transition-colors duration-200"
+              >
+                <Icon size={18} className="text-blue-500" />
+              </div>
+
+              {/* Text */}
+              <div>
+                <p
+                  className="text-sm font-semibold text-gray-800 mb-0.5"
+                  style={{ fontFamily: 'var(--font-display)' }}
+                >
+                  {label}
+                </p>
+                <p
+                  className="text-xs text-gray-400 leading-relaxed"
+                  style={{ fontFamily: 'var(--font-body)' }}
+                >
+                  {desc}
+                </p>
+              </div>
+            </div>
           ))}
-        </ul>
-
-        <div className="text-center mt-12">
-          <Link href="/amenities">
-            <Button variant="outline" size="lg" className="border-gold-400 text-gold-400 hover:bg-gold-400 hover:text-charcoal-900">
-              Explore All Amenities
-            </Button>
-          </Link>
         </div>
+
+        {/* Bottom note */}
+        <p
+          className="text-center text-sm text-gray-400 mt-10"
+          style={{ fontFamily: 'var(--font-accent)' }}
+        >
+          All amenities included with every room booking.
+        </p>
+
       </div>
     </section>
   )
