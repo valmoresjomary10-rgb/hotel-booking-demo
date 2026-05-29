@@ -1,96 +1,144 @@
 import Link from 'next/link'
-import Button from '@/components/ui/Button'
-import Badge from '@/components/ui/Badge'
-import Divider from '@/components/ui/Divider'
-
-const featuredRooms = [
-  {
-    name: 'Deluxe Room',
-    slug: 'deluxe-room',
-    description: 'Elegant comfort with city views, premium bedding, and a marble en-suite bathroom.',
-    price: 8500,
-    size: 35,
-    capacity: 2,
-    badge: 'Popular',
-    bg: 'bg-charcoal-800',
-  },
-  {
-    name: 'Junior Suite',
-    slug: 'junior-suite',
-    description: 'A spacious retreat with a separate living area, panoramic views, and butler service.',
-    price: 15000,
-    size: 65,
-    capacity: 3,
-    badge: 'Featured',
-    bg: 'bg-charcoal-700',
-  },
-  {
-    name: 'Presidential Suite',
-    slug: 'presidential-suite',
-    description: 'The pinnacle of luxury. Private terrace, grand piano, and dedicated concierge.',
-    price: 35000,
-    size: 120,
-    capacity: 4,
-    badge: 'Exclusive',
-    bg: 'bg-charcoal-900',
-  },
-]
+import Image from 'next/image'
+import { ArrowRight, Users, BedDouble, Maximize2, Star } from 'lucide-react'
+import { rooms } from '@/constants/roomData'
 
 export default function FeaturedRoomsSection() {
+  const featuredRooms = rooms.filter((r) => r.featured).slice(0, 3)
+
   return (
-    <section className="py-24 bg-cream-100">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <p className="font-accent text-gold-500 text-xs tracking-[0.3em] uppercase mb-4">
-            Accommodations
-          </p>
-          <h2 className="font-display text-charcoal-900 font-light"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}>
-            Our Finest Rooms
-          </h2>
-          <Divider ornamental className="mt-6" />
+    <section className="section-padding bg-white">
+      <div className="section-wrapper">
+
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+          <div>
+            <p className="section-label">Our Rooms</p>
+            <h2 className="section-heading">
+              Find Your Perfect Room
+            </h2>
+            <p className="section-subheading">
+              Every room is designed with your comfort in mind —
+              bright, clean, and thoughtfully furnished.
+            </p>
+          </div>
+          <Link
+            href="/rooms"
+            className="btn-secondary text-sm shrink-0 w-fit"
+          >
+            View All Rooms
+            <ArrowRight size={15} />
+          </Link>
         </div>
 
-        {/* Room Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Room Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredRooms.map((room) => (
-            <article key={room.slug} aria-label={room.name} className="group bg-cream-50 shadow-card hover:shadow-card-hover transition-all duration-500 overflow-hidden">
-              {/* Image placeholder */}
-              <div className={`${room.bg} h-64 relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-900/60 to-transparent" />
-                <div className="absolute top-4 left-4">
-                  <Badge label={room.badge} variant="gold" />
+            <Link
+              key={room.id}
+              href={`/rooms/${room.slug}`}
+              className="card group block"
+            >
+              {/* Room Image */}
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  src={room.images[0] || '/images/rooms/placeholder.jpg'}
+                  alt={room.name}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                {/* Availability badge */}
+                <div className="absolute top-3 left-3">
+                  <span className={`badge ${
+                    room.status === 'available' ? 'badge-sage' : 'badge-gray'
+                  }`}>
+                    {room.status === 'available' ? 'Available' : 'Booked'}
+                  </span>
                 </div>
-                <div className="absolute bottom-4 left-4 right-4">
-                  <p className="font-accent text-cream-50 text-xs tracking-widest uppercase">{room.size} m² · Up to {room.capacity} guests</p>
+                {/* Rating badge */}
+                <div className="absolute top-3 right-3 flex items-center gap-1
+                                bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1">
+                  <Star size={11} className="text-blue-400 fill-blue-400" />
+                  <span
+                    className="text-xs font-semibold text-gray-700"
+                    style={{ fontFamily: 'var(--font-accent)' }}
+                  >
+                    {room.rating}
+                  </span>
                 </div>
               </div>
 
-              {/* Content */}
-              <div className="p-6 space-y-4">
-                <h3 className="font-display text-charcoal-900 text-2xl font-light">{room.name}</h3>
-                <p className="font-body text-charcoal-700 text-sm leading-relaxed">{room.description}</p>
-                <div className="flex items-center justify-between pt-4 border-t border-cream-200">
-                  <div>
-                    <span className="font-display text-gold-500 text-2xl">₱{room.price.toLocaleString()}</span>
-                    <span className="font-body text-charcoal-700/60 text-sm"> / night</span>
+              {/* Room Info */}
+              <div className="p-5">
+
+                {/* Name & Price */}
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <h3
+                    className="text-base font-bold text-gray-900 leading-snug"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                  >
+                    {room.name}
+                  </h3>
+                  <div className="text-right shrink-0">
+                    <p
+                      className="text-lg font-bold text-blue-500"
+                      style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                      ₱{room.pricePerNight.toLocaleString()}
+                    </p>
+                    <p
+                      className="text-xs text-gray-400"
+                      style={{ fontFamily: 'var(--font-accent)' }}
+                    >
+                      per night
+                    </p>
                   </div>
-                  <Link href={`/rooms/${room.slug}`}>
-                    <Button variant="outline" size="sm" aria-label={`View ${room.name}`}>View Room</Button>
-                  </Link>
                 </div>
+
+                {/* Description */}
+                <p
+                  className="text-sm text-gray-500 line-clamp-2 mb-4"
+                  style={{ fontFamily: 'var(--font-body)' }}
+                >
+                  {room.description}
+                </p>
+
+                {/* Room specs */}
+                <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-1.5 text-gray-400">
+                    <Users size={13} />
+                    <span
+                      className="text-xs"
+                      style={{ fontFamily: 'var(--font-accent)' }}
+                    >
+                      {room.capacity} guests
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-gray-400">
+                    <BedDouble size={13} />
+                    <span
+                      className="text-xs capitalize"
+                      style={{ fontFamily: 'var(--font-accent)' }}
+                    >
+                      {room.bedType}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-gray-400">
+                    <Maximize2 size={13} />
+                    <span
+                      className="text-xs"
+                      style={{ fontFamily: 'var(--font-accent)' }}
+                    >
+                      {room.size} m²
+                    </span>
+                  </div>
+                </div>
+
               </div>
-            </article>
+            </Link>
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <Link href="/rooms">
-            <Button variant="primary" size="lg">View All Rooms</Button>
-          </Link>
-        </div>
       </div>
     </section>
   )
