@@ -35,7 +35,7 @@ export default function Footer() {
             {/* Socials */}
             <div className="flex items-center gap-3">
               
-                href={siteConfig.socials.instagram}
+<a href={siteConfig.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -44,7 +44,7 @@ export default function Footer() {
                 <Instagram size={16} />
               </a>
               
-                href={siteConfig.socials.facebook}
+<a href={siteConfig.socials.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
