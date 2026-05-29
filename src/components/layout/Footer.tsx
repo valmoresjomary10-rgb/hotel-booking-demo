@@ -31,27 +31,29 @@ export default function Footer() {
               Perfect for families, couples, and every traveler
               looking for comfort and care.
             </p>
+
             {/* Socials */}
-<div className="flex items-center gap-3">
-  
-    href={siteConfig.socials.instagram}
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Instagram"
-    className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 transition-all duration-200 hover:text-blue-500 hover:border-blue-200"
-  >
-    <Instagram size={16} />
-  </a>
-  
-    href={siteConfig.socials.facebook}
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Facebook"
-    className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 transition-all duration-200 hover:text-blue-500 hover:border-blue-200"
-  >
-    <Facebook size={16} />
-  </a>
-</div>
+            <div className="flex items-center gap-3">
+              
+                href={siteConfig.socials.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 transition-all duration-200 hover:text-blue-500 hover:border-blue-200"
+              >
+                <Instagram size={16} />
+              </a>
+              
+                href={siteConfig.socials.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 transition-all duration-200 hover:text-blue-500 hover:border-blue-200"
+              >
+                <Facebook size={16} />
+              </a>
+            </div>
+          </div>
 
           {/* Quick Links */}
           <div>
