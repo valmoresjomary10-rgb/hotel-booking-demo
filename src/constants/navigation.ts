@@ -4,5 +4,4 @@ export const publicNavLinks = [
   { label: 'Gallery', href: '/gallery' },
   { label: 'Offers', href: '/offers' },
   { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
 ]
