@@ -1,16 +1,8 @@
-/* ============================================
-   HOTEL LUMIÈRE — GLOBAL STYLES
-   Scandinavian / Boutique Refresh
-   ============================================ */
-
 @import '../src/styles/tokens.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* --- Import Design Tokens --- */
-@import '../src/styles/tokens.css';
 
 /* ============================================
    BASE LAYER
@@ -76,20 +68,13 @@
     color: var(--color-gray-900);
   }
 
-  /* Scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--color-gray-100);
-  }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-gray-100); }
   ::-webkit-scrollbar-thumb {
     background: var(--color-gray-300);
     border-radius: var(--radius-full);
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gray-400);
-  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-gray-400); }
 }
 
 /* ============================================
@@ -97,7 +82,6 @@
    ============================================ */
 @layer components {
 
-  /* --- Section Wrapper --- */
   .section-wrapper {
     @apply w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8;
   }
@@ -106,15 +90,12 @@
     @apply py-16 md:py-24;
   }
 
-  /* --- Section Label (small tag above headings) --- */
   .section-label {
-    @apply inline-block text-xs font-semibold tracking-widest uppercase;
+    @apply inline-block text-xs font-semibold tracking-widest uppercase mb-3;
     font-family: var(--font-accent);
     color: var(--color-accent-primary);
-    margin-bottom: 0.75rem;
   }
 
-  /* --- Section Heading --- */
   .section-heading {
     @apply text-3xl md:text-4xl font-bold;
     font-family: var(--font-display);
@@ -129,7 +110,6 @@
     line-height: 1.7;
   }
 
-  /* --- Cards --- */
   .card {
     @apply bg-white rounded-2xl overflow-hidden;
     box-shadow: var(--shadow-md);
@@ -146,7 +126,6 @@
     box-shadow: var(--shadow-sm);
   }
 
-  /* --- Buttons --- */
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-white;
     font-family: var(--font-accent);
@@ -190,7 +169,6 @@
     color: var(--color-gray-900);
   }
 
-  /* --- Inputs --- */
   .input-base {
     @apply w-full px-4 py-3 rounded-xl text-sm outline-none;
     font-family: var(--font-body);
@@ -209,7 +187,6 @@
     color: var(--color-text-muted);
   }
 
-  /* --- Badges --- */
   .badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
     font-family: var(--font-accent);
@@ -230,13 +207,11 @@
     color: var(--color-gray-600);
   }
 
-  /* --- Divider --- */
   .divider {
     @apply w-full h-px;
     background-color: var(--color-border);
   }
 
-  /* --- Page Hero Background --- */
   .hero-bg {
     background: linear-gradient(
       135deg,
@@ -251,9 +226,7 @@
    UTILITIES LAYER
    ============================================ */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  .text-balance { text-wrap: balance; }
 
   .animate-fade-in {
     animation: fadeIn 0.5s ease forwards;
