@@ -1,15 +1,273 @@
+/* ============================================
+   HOTEL LUMIÈRE — GLOBAL STYLES
+   Scandinavian / Boutique Refresh
+   ============================================ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-gold-400: #d4aa5f;
-  --color-gold-500: #c49a3a;
-  --color-gold-600: #a67c1e;
-  --color-charcoal-900: #0f0f0f;
-  --color-charcoal-800: #1a1a1a;
-  --color-charcoal-700: #2a2a2a;
-  --color-cream-50:  #fefefe;
-  --color-cream-100: #f9f6f1;
-  --color-cream-200: #f0ebe0;
+/* --- Import Design Tokens --- */
+@import '../src/styles/tokens.css';
+
+/* ============================================
+   BASE LAYER
+   ============================================ */
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--color-gray-900);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  button {
+    cursor: pointer;
+    font-family: var(--font-accent);
+  }
+
+  input, textarea, select {
+    font-family: var(--font-body);
+    font-size: 1rem;
+  }
+
+  ::selection {
+    background-color: var(--color-blue-100);
+    color: var(--color-gray-900);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-gray-100);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-gray-300);
+    border-radius: var(--radius-full);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-400);
+  }
+}
+
+/* ============================================
+   COMPONENTS LAYER
+   ============================================ */
+@layer components {
+
+  /* --- Section Wrapper --- */
+  .section-wrapper {
+    @apply w-full max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  /* --- Section Label (small tag above headings) --- */
+  .section-label {
+    @apply inline-block text-xs font-semibold tracking-widest uppercase;
+    font-family: var(--font-accent);
+    color: var(--color-accent-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  /* --- Section Heading --- */
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold;
+    font-family: var(--font-display);
+    color: var(--color-gray-900);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .section-subheading {
+    @apply text-base md:text-lg mt-4 max-w-2xl;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+
+  /* --- Cards --- */
+  .card {
+    @apply bg-white rounded-2xl overflow-hidden;
+    box-shadow: var(--shadow-md);
+    transition: box-shadow var(--transition-base), transform var(--transition-base);
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+  }
+
+  .card-soft {
+    @apply bg-gray-50 rounded-2xl overflow-hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* --- Buttons --- */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium text-white;
+    font-family: var(--font-accent);
+    background-color: var(--color-accent-primary);
+    box-shadow: var(--shadow-md);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-hover);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-medium;
+    font-family: var(--font-accent);
+    background-color: var(--color-white);
+    color: var(--color-gray-800);
+    border: 1.5px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-blue-300);
+    color: var(--color-accent-primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium;
+    font-family: var(--font-accent);
+    color: var(--color-text-secondary);
+    transition: all var(--transition-fast);
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+  }
+
+  /* --- Inputs --- */
+  .input-base {
+    @apply w-full px-4 py-3 rounded-xl text-sm outline-none;
+    font-family: var(--font-body);
+    background-color: var(--color-white);
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text-primary);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .input-base:focus {
+    border-color: var(--color-blue-400);
+    box-shadow: 0 0 0 3px var(--color-blue-100);
+  }
+
+  .input-base::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  /* --- Badges --- */
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+    font-family: var(--font-accent);
+  }
+
+  .badge-blue {
+    background-color: var(--color-blue-50);
+    color: var(--color-blue-600);
+  }
+
+  .badge-sage {
+    background-color: var(--color-sage-50);
+    color: var(--color-sage-500);
+  }
+
+  .badge-gray {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-600);
+  }
+
+  /* --- Divider --- */
+  .divider {
+    @apply w-full h-px;
+    background-color: var(--color-border);
+  }
+
+  /* --- Page Hero Background --- */
+  .hero-bg {
+    background: linear-gradient(
+      135deg,
+      var(--color-blue-50) 0%,
+      var(--color-white) 50%,
+      var(--color-sage-50) 100%
+    );
+  }
+}
+
+/* ============================================
+   UTILITIES LAYER
+   ============================================ */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 }
