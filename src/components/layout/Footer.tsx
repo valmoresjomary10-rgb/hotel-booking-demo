@@ -1,51 +1,76 @@
 import Link from 'next/link'
-import { publicNavLinks } from '@/constants/navigation'
+import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react'
 import { siteConfig } from '@/constants/siteConfig'
-import Divider from '@/components/ui/Divider'
+import { publicNavLinks } from '@/constants/navigation'
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear()
+
   return (
-    <footer aria-label="Site footer" className="bg-charcoal-900 text-cream-100">
-      <div className="container mx-auto pt-16 pb-8">
+    <footer className="bg-gray-50 border-t border-gray-200">
 
-        {/* Top Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      {/* Main Footer */}
+      <div className="section-wrapper py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
-          {/* Brand */}
-          <div className="md:col-span-2 space-y-4">
-            <div>
-              <h2 className="font-accent text-2xl tracking-widest text-cream-50">
+          {/* Brand Column */}
+          <div className="lg:col-span-1">
+            <Link href="/" className="inline-block mb-4">
+              <span
+                className="text-xl font-bold text-gray-900"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
                 {siteConfig.name}
-              </h2>
-              <p className="font-body text-sm text-gold-400 tracking-wider uppercase mt-1">
-                {siteConfig.tagline}
-              </p>
-            </div>
-            <p className="font-body text-sm text-cream-200 leading-relaxed max-w-sm">
-              Experience the pinnacle of luxury hospitality. Every detail crafted for your comfort and pleasure.
+              </span>
+            </Link>
+            <p
+              className="text-sm text-gray-500 leading-relaxed mb-6"
+              style={{ fontFamily: 'var(--font-body)' }}
+            >
+              A warm, relaxing retreat in the heart of Manila.
+              Perfect for families, couples, and every traveler
+              looking for comfort and care.
             </p>
             {/* Socials */}
-            <div className="flex gap-4">
-              <a href={siteConfig.socials.instagram} aria-label="Follow us on Instagram" target="_blank" rel="noopener noreferrer" className="text-cream-200 hover:text-gold-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            <div className="flex items-center gap-3">
+              
+                href={siteConfig.socials.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400
+                           hover:text-blue-500 hover:border-blue-200 transition-all duration-200"
+                aria-label="Instagram"
+              >
+                <Instagram size={16} />
               </a>
-              <a href={siteConfig.socials.facebook} aria-label="Follow us on Facebook" target="_blank" rel="noopener noreferrer" className="text-cream-200 hover:text-gold-400 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+              
+                href={siteConfig.socials.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400
+                           hover:text-blue-500 hover:border-blue-200 transition-all duration-200"
+                aria-label="Facebook"
+              >
+                <Facebook size={16} />
               </a>
             </div>
           </div>
 
-          {/* Navigation */}
-          <div className="space-y-4">
-            <h3 className="font-accent text-xs tracking-widest text-gold-400 uppercase">
+          {/* Quick Links */}
+          <div>
+            <h4
+              className="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-5"
+              style={{ fontFamily: 'var(--font-accent)' }}
+            >
               Explore
-            </h3>
-            <ul className="space-y-2">
+            </h4>
+            <ul className="flex flex-col gap-3">
               {publicNavLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-body text-sm text-cream-200 hover:text-gold-400 transition-colors"
+                    className="text-sm text-gray-600 hover:text-blue-500 transition-colors duration-200"
+                    style={{ fontFamily: 'var(--font-body)' }}
                   >
                     {link.label}
                   </Link>
@@ -54,53 +79,116 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Stay Info */}
+          <div>
+            <h4
+              className="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-5"
+              style={{ fontFamily: 'var(--font-accent)' }}
+            >
+              Your Stay
+            </h4>
+            <ul className="flex flex-col gap-3">
+              {[
+                { label: 'Book a Room', href: '/booking' },
+                { label: 'View All Rooms', href: '/rooms' },
+                { label: 'Special Offers', href: '/offers' },
+                { label: 'Amenities', href: '/amenities' },
+                { label: 'Gallery', href: '/gallery' },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-gray-600 hover:text-blue-500 transition-colors duration-200"
+                    style={{ fontFamily: 'var(--font-body)' }}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Contact */}
-          <div className="space-y-4">
-            <h3 className="font-accent text-xs tracking-widest text-gold-400 uppercase">
-              Contact
-            </h3>
-            <ul className="space-y-3 font-body text-sm text-cream-200">
-              <li>{siteConfig.address}</li>
-              <li>
-                <a href={`tel:${siteConfig.phone}`} className="hover:text-gold-400 transition-colors">
+          <div>
+            <h4
+              className="text-xs font-semibold tracking-widest uppercase text-gray-400 mb-5"
+              style={{ fontFamily: 'var(--font-accent)' }}
+            >
+              Contact Us
+            </h4>
+            <ul className="flex flex-col gap-4">
+              <li className="flex items-start gap-3">
+                <MapPin size={15} className="text-blue-400 mt-0.5 shrink-0" />
+                <span className="text-sm text-gray-600 leading-relaxed">
+                  {siteConfig.address}
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone size={15} className="text-blue-400 shrink-0" />
+                
+                  href={`tel:${siteConfig.phone}`}
+                  className="text-sm text-gray-600 hover:text-blue-500 transition-colors"
+                >
                   {siteConfig.phone}
                 </a>
               </li>
-              <li>
-                <a href={`mailto:${siteConfig.email}`} className="hover:text-gold-400 transition-colors">
+              <li className="flex items-center gap-3">
+                <Mail size={15} className="text-blue-400 shrink-0" />
+                
+                  href={`mailto:${siteConfig.email}`}
+                  className="text-sm text-gray-600 hover:text-blue-500 transition-colors"
+                >
                   {siteConfig.email}
                 </a>
               </li>
-              <li className="text-cream-200/60 text-xs">
-                Check-in: {siteConfig.checkInTime} · Check-out: {siteConfig.checkOutTime}
-              </li>
             </ul>
+
+            {/* Check-in / Check-out */}
+            <div className="mt-6 p-4 bg-white rounded-xl border border-gray-200">
+              <div className="flex justify-between text-xs" style={{ fontFamily: 'var(--font-accent)' }}>
+                <div>
+                  <p className="text-gray-400 mb-1">Check-in</p>
+                  <p className="font-semibold text-gray-700">{siteConfig.checkInTime}</p>
+                </div>
+                <div className="w-px bg-gray-200" />
+                <div className="text-right">
+                  <p className="text-gray-400 mb-1">Check-out</p>
+                  <p className="font-semibold text-gray-700">{siteConfig.checkOutTime}</p>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
+      </div>
 
-        <Divider className="border-charcoal-700" />
-
-        {/* Bottom */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-4">
-          <div className="flex flex-col md:flex-row items-center gap-2">
-            <p className="font-body text-xs text-cream-200/50">
-              © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
-            </p>
-            <span className="hidden md:block font-body text-xs text-cream-200/30">·</span>
-            <p className="font-body text-xs text-cream-200/30">
-              Crafted by <span className="text-gold-400/70 hover:text-gold-400 transition-colors">Jomary.dev</span>
-            </p>
-          </div>
-          <div className="flex gap-6">
-            <Link href="#" className="font-body text-xs text-cream-200/50 hover:text-gold-400 transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="#" className="font-body text-xs text-cream-200/50 hover:text-gold-400 transition-colors">
-              Terms of Service
-            </Link>
+      {/* Bottom Bar */}
+      <div className="border-t border-gray-200">
+        <div className="section-wrapper py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p
+            className="text-xs text-gray-400"
+            style={{ fontFamily: 'var(--font-accent)' }}
+          >
+            © {currentYear} {siteConfig.name}. All rights reserved.
+          </p>
+          <div className="flex items-center gap-5">
+            {[
+              { label: 'Privacy Policy', href: '/privacy' },
+              { label: 'Terms of Use', href: '/terms' },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-xs text-gray-400 hover:text-blue-500 transition-colors"
+                style={{ fontFamily: 'var(--font-accent)' }}
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
+
     </footer>
   )
 }
