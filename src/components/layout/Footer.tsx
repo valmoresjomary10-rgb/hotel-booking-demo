@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { MapPin, Phone, Mail, Instagram, Facebook } from 'lucide-react'
+import { MapPin, Phone, Mail, Share2, ExternalLink } from 'lucide-react'
 import { siteConfig } from '@/constants/siteConfig'
 import { publicNavLinks } from '@/constants/navigation'
 
@@ -41,7 +41,7 @@ export default function Footer() {
                 aria-label="Instagram"
                 className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 transition-all duration-200 hover:text-blue-500 hover:border-blue-200"
               >
-                <Instagram size={16} />
+                <Share2 size={16} />
               </a>
               
 <a href={siteConfig.socials.facebook}
@@ -50,7 +50,7 @@ export default function Footer() {
                 aria-label="Facebook"
                 className="p-2 rounded-xl bg-white border border-gray-200 text-gray-400 transition-all duration-200 hover:text-blue-500 hover:border-blue-200"
               >
-                <Facebook size={16} />
+                <ExternalLink size={16} />
               </a>
             </div>
           </div>
