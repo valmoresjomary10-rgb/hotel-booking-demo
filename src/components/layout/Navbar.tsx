@@ -1,109 +1,182 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { Menu, X } from 'lucide-react'
 import { publicNavLinks } from '@/constants/navigation'
 import { siteConfig } from '@/constants/siteConfig'
-import { cn } from '@/lib/utils/cn'
-import Button from '@/components/ui/Button'
-import { usePathname } from 'next/navigation'
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
+    const handleScroll = () => setIsScrolled(window.scrollY > 12)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false)
+  }, [pathname])
+
   return (
     <>
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-gold-500 focus:text-cream-50 focus:font-accent focus:text-sm focus:tracking-widest focus:uppercase"
+      <header
+        className={`
+          fixed top-0 left-0 right-0 z-50
+          transition-all duration-300
+          ${isScrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-soft border-b border-gray-100'
+            : 'bg-white/80 backdrop-blur-sm'
+          }
+        `}
+        style={{ height: 'var(--navbar-height)' }}
       >
-        Skip to main content
-      </a>
-
-      <header className={cn(
-        'fixed top-0 left-0 right-0 z-sticky transition-all duration-300',
-        scrolled
-          ? 'bg-cream-50/95 backdrop-blur-sm shadow-sm border-b border-cream-200'
-          : 'bg-transparent'
-      )}>
-        <div className="container mx-auto flex items-center justify-between h-20">
+        <div className="section-wrapper h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex flex-col leading-none group" aria-label="Hotel Lumière — Home">
-            <span className={cn('font-accent text-xl tracking-widest transition-colors group-hover:text-gold-500', scrolled ? 'text-charcoal-900' : 'text-cream-50')}>
+          <Link href="/" className="flex flex-col leading-none group">
+            <span
+              className="text-xl font-bold tracking-tight text-gray-900 transition-colors group-hover:text-blue-500"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
               {siteConfig.name}
             </span>
-            <span className="font-body text-xs tracking-wider text-gold-500 uppercase">
+            <span
+              className="text-[10px] tracking-[0.2em] uppercase text-gray-400 mt-0.5"
+              style={{ fontFamily: 'var(--font-accent)' }}
+            >
               {siteConfig.tagline}
             </span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-8">
-            {publicNavLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={pathname === link.href ? 'page' : undefined}
-                className={cn(
-  'font-body text-sm transition-colors tracking-wide relative group focus-visible:outline-none focus-visible:text-gold-500',
-  scrolled ? 'text-charcoal-700 hover:text-gold-500' : 'text-cream-50 hover:text-gold-400',
-  pathname === link.href && 'text-gold-500'
-)}
-              >
-                {link.label}
-                <span className={cn('absolute -bottom-1 left-0 h-px bg-gold-400 transition-all duration-300', pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full')} />
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center gap-1">
+            {publicNavLinks.map((link) => {
+              const isActive = pathname === link.href ||
+                (link.href !== '/' && pathname.startsWith(link.href))
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`
+                    relative px-4 py-2 rounded-lg text-sm font-medium
+                    transition-all duration-200
+                    style={{ fontFamily: 'var(--font-accent)' }}
+                    ${isActive
+                      ? 'text-blue-500 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                    }
+                  `}
+                >
+                  {link.label}
+                  {isActive && (
+                    <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-blue-400" />
+                  )}
+                </Link>
+              )
+            })}
           </nav>
+
+          {/* Desktop CTA */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              href="/booking"
+              className="btn-primary text-sm px-5 py-2.5"
+            >
+              Book Now
+            </Link>
+          </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden flex flex-col gap-1.5 p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 rounded"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+            aria-label="Toggle menu"
           >
-            <span className={cn('w-6 h-px transition-all duration-300', scrolled ? 'bg-charcoal-900' : 'bg-cream-50', menuOpen && 'rotate-45 translate-y-2')} />
-            <span className={cn('w-6 h-px transition-all duration-300', scrolled ? 'bg-charcoal-900' : 'bg-cream-50', menuOpen && 'rotate-45 translate-y-2')} />
-            <span className={cn('w-6 h-px transition-all duration-300', scrolled ? 'bg-charcoal-900' : 'bg-cream-50', menuOpen && 'rotate-45 translate-y-2')} />
-                      </button>
+            {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+
+        </div>
+      </header>
+
+      {/* Mobile Menu Overlay */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Menu Drawer */}
+      <div
+        className={`
+          fixed top-0 right-0 z-50 h-full w-72 bg-white shadow-soft-xl
+          transform transition-transform duration-300 ease-smooth md:hidden
+          ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}
+        `}
+      >
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+          <span
+            className="text-lg font-bold text-gray-900"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
+            {siteConfig.name}
+          </span>
+          <button
+            onClick={() => setIsMenuOpen(false)}
+            className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 transition-colors"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        {/* Mobile Menu */}
-        <nav
-          id="mobile-menu"
-          aria-label="Mobile navigation"
-          aria-hidden={!menuOpen}
-          className={cn(
-            'lg:hidden bg-cream-50 border-t border-cream-200 px-6 py-6',
-            menuOpen ? 'flex flex-col gap-4' : 'hidden'
-          )}
-        >
-          {publicNavLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                'font-body transition-colors py-2 border-b border-cream-200 focus-visible:outline-none focus-visible:text-gold-500',
-                pathname === link.href ? 'text-gold-500' : 'text-charcoal-700 hover:text-gold-500'
-              )}
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+        {/* Drawer Links */}
+        <nav className="px-4 py-4 flex flex-col gap-1">
+          {publicNavLinks.map((link) => {
+            const isActive = pathname === link.href ||
+              (link.href !== '/' && pathname.startsWith(link.href))
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`
+                  px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
+                  ${isActive
+                    ? 'text-blue-500 bg-blue-50'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                  }
+                `}
+                style={{ fontFamily: 'var(--font-accent)' }}
+              >
+                {link.label}
+              </Link>
+            )
+          })}
         </nav>
-      </header>
+
+        {/* Drawer CTA */}
+        <div className="px-4 pt-2">
+          <Link
+            href="/booking"
+            className="btn-primary w-full text-sm justify-center"
+          >
+            Book Now
+          </Link>
+        </div>
+
+        {/* Drawer Footer */}
+        <div className="absolute bottom-8 left-0 right-0 px-6">
+          <p className="text-xs text-gray-400 text-center" style={{ fontFamily: 'var(--font-accent)' }}>
+            {siteConfig.phone}
+          </p>
+        </div>
+      </div>
     </>
   )
 }
