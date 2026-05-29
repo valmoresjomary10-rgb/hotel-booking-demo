@@ -168,7 +168,7 @@ export default function Footer() {
             className="text-xs text-gray-400"
             style={{ fontFamily: 'var(--font-accent)' }}
           >
-            © {currentYear} {siteConfig.name}. All rights reserved.
+            © {currentYear} {siteConfig.name}. All rights reserved. · Created by Jomary.dev
           </p>
           <div className="flex items-center gap-5">
             {[
