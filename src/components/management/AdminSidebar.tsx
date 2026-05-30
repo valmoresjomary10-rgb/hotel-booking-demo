@@ -4,13 +4,9 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, BedDouble, CalendarCheck, Images,
-  FileText, Tag, CreditCard, LogOut, Sparkles,
-} from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
-import {
-  LayoutDashboard, BedDouble, CalendarCheck, Images,
   FileText, Tag, CreditCard, LogOut, Sparkles, Phone,
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 const navItems = [
   { label: 'Dashboard', href: '/management/dashboard', icon: LayoutDashboard },
@@ -38,10 +34,10 @@ export default function AdminSidebar() {
 
   return (
     <>
-      <aside className="w-64 shrink-0 bg-charcoal-900 h-screen flex flex-col">
-        <div className="px-6 py-6 border-b border-charcoal-700">
-          <p className="font-accent text-[10px] uppercase tracking-widest text-gold-400/60 mb-0.5">Management</p>
-          <p className="font-display text-xl text-cream-50">Hotel Lumière</p>
+      <aside className="w-64 shrink-0 bg-gray-900 h-screen flex flex-col">
+        <div className="px-6 py-6 border-b border-gray-700">
+          <p className="font-accent text-[10px] uppercase tracking-widest text-blue-400/60 mb-0.5">Management</p>
+          <p className="font-display text-xl text-white">Hotel Lumière</p>
         </div>
         <nav className="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
           {navItems.map(({ label, href, icon: Icon }) => {
@@ -50,18 +46,18 @@ export default function AdminSidebar() {
               <Link key={href} href={href}
                 aria-current={active ? 'page' : undefined}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-sm font-body transition-colors ${
-                  active ? 'bg-gold-500/10 text-gold-400' : 'text-cream-200/50 hover:text-cream-200 hover:bg-charcoal-800'
+                  active ? 'bg-blue-500/10 text-blue-400' : 'text-gray-400/70 hover:text-gray-200 hover:bg-gray-800'
                 }`}>
-                <Icon aria-hidden="true" size={16} className={active ? 'text-gold-400' : ''} />
+                <Icon aria-hidden="true" size={16} className={active ? 'text-blue-400' : ''} />
                 {label}
               </Link>
             )
           })}
         </nav>
-        <div className="px-3 py-4 border-t border-charcoal-700">
+        <div className="px-3 py-4 border-t border-gray-700">
           <button onClick={() => setShowConfirm(true)}
             aria-label="Sign out of management panel"
-            className="flex items-center gap-3 px-3 py-2.5 w-full text-sm font-body text-cream-200/40 hover:text-cream-200/70 transition-colors">
+            className="flex items-center gap-3 px-3 py-2.5 w-full text-sm font-body text-gray-400/50 hover:text-gray-200/70 transition-colors">
             <LogOut aria-hidden="true" size={16} />
             Sign Out
           </button>
@@ -72,23 +68,23 @@ export default function AdminSidebar() {
       {showConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-charcoal-900/80 backdrop-blur-sm"
+          <div className="absolute inset-0 bg-gray-900/80 backdrop-blur-sm"
             onClick={() => setShowConfirm(false)} />
           {/* Modal */}
-          <div role="dialog" aria-modal="true" aria-labelledby="signout-title" className="relative bg-charcoal-800 border border-charcoal-700 p-8 w-full max-w-sm mx-4">
-            <h3 id="signout-title" className="font-display text-xl text-cream-50 mb-2">Sign Out</h3>
-            <p className="font-body text-sm text-cream-200/60 mb-8">
+          <div role="dialog" aria-modal="true" aria-labelledby="signout-title" className="relative bg-gray-800 border border-gray-700 p-8 w-full max-w-sm mx-4">
+            <h3 id="signout-title" className="font-display text-xl text-white mb-2">Sign Out</h3>
+            <p className="font-body text-sm text-gray-300/60 mb-8">
               Are you sure you want to sign out of the management panel?
             </p>
             <div className="flex gap-3">
               <button onClick={() => setShowConfirm(false)}
                 aria-label="Cancel sign out"
-                className="flex-1 border border-charcoal-700 text-cream-200/60 hover:text-cream-200 font-accent text-[10px] uppercase tracking-widest py-3 transition-colors">
+                className="flex-1 border border-gray-700 text-gray-300/60 hover:text-gray-200 font-accent text-[10px] uppercase tracking-widest py-3 transition-colors">
                 Cancel
               </button>
               <button onClick={handleSignOut}
                 aria-label="Confirm sign out"
-                className="flex-1 bg-gold-500 hover:bg-gold-400 text-charcoal-900 font-accent text-[10px] uppercase tracking-widest py-3 transition-colors">
+                className="flex-1 bg-blue-500 hover:bg-blue-400 text-gray-900 font-accent text-[10px] uppercase tracking-widest py-3 transition-colors">
                 Yes, Sign Out
               </button>
             </div>

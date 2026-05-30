@@ -80,13 +80,13 @@ export default function GalleryGridSection() {
           role="dialog"
           aria-modal="true"
           aria-label="Image lightbox"
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-charcoal-900/95"
+          className="fixed inset-0 z-[999] flex items-center justify-center" style={{ backgroundColor: "rgba(15,15,15,0.97)" }}
           onClick={closeLightbox}
         >
           {/* Close */}
           <button
             aria-label="Close lightbox"
-            className="absolute right-6 top-20 text-cream-200/60 transition-colors hover:text-gold-400"
+            className="absolute right-6 top-6 text-white/60 transition-colors hover:text-white z-10"
             onClick={closeLightbox}
           >
             <X size={28} strokeWidth={1.5} />
@@ -95,7 +95,7 @@ export default function GalleryGridSection() {
           {/* Prev */}
           <button
             aria-label="Previous image"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-cream-200/60 transition-colors hover:text-gold-400 md:left-8"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 transition-colors hover:text-white md:left-8"
             onClick={(e) => { e.stopPropagation(); prev() }}
           >
             <ChevronLeft size={36} strokeWidth={1.5} />
@@ -122,7 +122,7 @@ export default function GalleryGridSection() {
           {/* Next */}
           <button
             aria-label="Next image"
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-cream-200/60 transition-colors hover:text-gold-400 md:right-8"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 transition-colors hover:text-white md:right-8"
             onClick={(e) => { e.stopPropagation(); next() }}
           >
             <ChevronRight size={36} strokeWidth={1.5} />

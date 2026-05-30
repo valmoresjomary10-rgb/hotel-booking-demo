@@ -13,7 +13,6 @@ export default function CTASection() {
             border: '1.5px solid var(--color-blue-100)',
           }}
         >
-
           {/* Decorative blobs */}
           <div className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-30 blur-3xl pointer-events-none"
             style={{ background: 'radial-gradient(circle, var(--color-blue-200), transparent)' }}
@@ -36,8 +35,8 @@ export default function CTASection() {
               className="text-base md:text-lg text-gray-500 max-w-xl mx-auto mb-10"
               style={{ fontFamily: 'var(--font-body)' }}
             >
-              Whether it's a family vacation, a romantic getaway, or a solo
-              adventure — we're here to make it memorable.
+              Whether it&apos;s a family vacation, a romantic getaway, or a solo
+              adventure — we&apos;re here to make it memorable.
             </p>
 
             {/* Buttons */}
@@ -59,10 +58,7 @@ export default function CTASection() {
                 style={{ fontFamily: 'var(--font-accent)' }}
               >
                 Prefer to call? Reach us at{' '}
-                
-                  href={`tel:${siteConfig.phone}`}
-                  className="text-blue-500 hover:text-blue-600 font-medium transition-colors"
-                >
+                <a href={`tel:${siteConfig.phone}`} className="text-blue-500 hover:text-blue-600 font-medium transition-colors">
                   {siteConfig.phone}
                 </a>
               </p>

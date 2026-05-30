@@ -1,15 +1,20 @@
 export default function OfferHeroSection() {
   return (
-    <section className="bg-charcoal-900 py-24 px-6">
-      <div className="max-w-4xl mx-auto text-center">
-        <p className="font-accent text-[11px] uppercase tracking-widest text-gold-400 mb-4">
-          Special Offers
-        </p>
-        <h1 className="font-display text-5xl md:text-6xl text-cream-50 leading-tight">
-          Curated <span className="italic text-gold-400">Privileges</span>
+    <section className="relative py-32 md:py-44" style={{ backgroundColor: '#000000' }}>
+      <div className="pointer-events-none absolute inset-8 border border-white/10" />
+      <div className="relative mx-auto max-w-4xl px-6 text-center">
+        <div className="mb-6 flex items-center justify-center gap-3">
+          <span className="h-px w-12 bg-blue-400" />
+          <span className="font-accent text-xs uppercase tracking-[0.3em] text-blue-400">
+            Special Offers
+          </span>
+          <span className="h-px w-12 bg-blue-400" />
+        </div>
+        <h1 className="font-display text-5xl font-light text-white md:text-7xl">
+          Curated{' '}
+          <em className="italic text-blue-400">Privileges</em>
         </h1>
-        <div className="w-16 h-px bg-gold-400 mx-auto mt-6 mb-6" />
-        <p className="font-body text-cream-200/70 text-lg max-w-xl mx-auto leading-relaxed">
+        <p className="mt-6 font-body text-base leading-relaxed text-gray-400 md:text-lg">
           Exceptional experiences, thoughtfully packaged. Discover our collection of exclusive offers designed to elevate every stay at Hotel Lumière.
         </p>
       </div>

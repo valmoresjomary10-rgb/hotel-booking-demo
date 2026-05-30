@@ -39,9 +39,9 @@ export default function Navbar() {
         <div className="section-wrapper h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex flex-col leading-none group">
+          <Link href="/rooms" className="flex flex-col leading-none group">
             <span
-              className="text-xl font-bold tracking-tight text-gray-900 transition-colors group-hover:text-blue-500"
+            className="text-xl font-bold tracking-tight text-blue-500 transition-colors group-hover:text-blue-600"
               style={{ fontFamily: 'var(--font-display)' }}
             >
               {siteConfig.name}
@@ -122,7 +122,7 @@ export default function Navbar() {
         {/* Drawer Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
           <span
-            className="text-lg font-bold text-gray-900"
+          className="text-lg font-bold text-blue-500"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             {siteConfig.name}

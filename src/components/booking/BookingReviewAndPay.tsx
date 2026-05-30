@@ -282,9 +282,7 @@ export default function BookingReviewAndPay({
           onClick={handleConfirm}
           disabled={loading}
           aria-label={loading ? 'Processing payment, please wait' : method === 'card' ? 'Confirm and pay now' : `Confirm and pay with ${method === 'gcash' ? 'GCash' : 'Maya'}`}
-          className="flex-1 flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400
-            text-charcoal-900 font-accent text-xs tracking-widest uppercase py-4 px-6
-            transition-colors duration-200 rounded-sm disabled:opacity-60 disabled:cursor-not-allowed"
+          className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm py-4 px-6 rounded-xl transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>

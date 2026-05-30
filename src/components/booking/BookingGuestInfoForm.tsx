@@ -26,7 +26,7 @@ interface FieldProps {
   error?: string
   icon: React.ReactNode
   children: React.ReactNode
-  id: string  
+  id?: string
 }
 
 function Field({ label, error, icon, children }: FieldProps) {
@@ -167,7 +167,7 @@ export default function BookingGuestInfoForm({
         </button>
         <button
           type="submit"
-          className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm py-4 px-6 rounded-xl transition-all duration-200
+          className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm py-4 px-6 rounded-xl transition-all duration-200"
         >
           Review Booking
           <ChevronRight className="h-4 w-4" />

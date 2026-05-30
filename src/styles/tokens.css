@@ -39,7 +39,7 @@
   --color-cream:  #fdfcfb;
 
   /* --- Semantic Tokens --- */
-  --color-bg-primary:    var(--color-white);
+  --color-bg-primary:    #ffffff;
   --color-bg-secondary:  var(--color-gray-50);
   --color-bg-soft:       var(--color-blue-50);
   --color-bg-sage:       var(--color-sage-50);

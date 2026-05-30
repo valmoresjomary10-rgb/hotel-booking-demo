@@ -109,12 +109,12 @@ export default function ManagementLoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-charcoal-900 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <p className="font-accent text-[10px] uppercase tracking-widest text-gold-400/60 mb-1">Management</p>
-          <h1 className="font-display text-3xl text-cream-50">Hotel Lumière</h1>
-          <div className="w-10 h-px bg-gold-400/40 mx-auto mt-4" />
+          <p className="font-accent text-[10px] uppercase tracking-widest text-blue-400/60 mb-1">Management</p>
+          <h1 className="font-display text-3xl text-white">Hotel Lumière</h1>
+          <div className="w-10 h-px bg-blue-400/40 mx-auto mt-4" />
         </div>
 
         {lockedUntil ? (
@@ -125,30 +125,30 @@ export default function ManagementLoginPage() {
                 Account Temporarily Locked
               </p>
               <p className="font-display text-4xl text-red-400 mb-3">{countdown}</p>
-              <p className="font-body text-xs text-cream-200/50">
+              <p className="font-body text-xs text-gray-300/50">
                 Too many failed attempts. Please wait before trying again.
               </p>
             </div>
-            <p className="font-body text-xs text-cream-200/30">
+            <p className="font-body text-xs text-gray-400/40">
               If you've forgotten your password, contact{' '}
-              <span className="text-gold-400/60">reservations@hotellumiere.com</span>
+              <span className="text-blue-400/60">reservations@hotellumiere.com</span>
             </p>
           </div>
         ) : (
           /* Login form */
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="font-accent text-[9px] uppercase tracking-widest text-cream-200/40 block mb-1.5">Email</label>
+              <label className="font-accent text-[9px] uppercase tracking-widest text-gray-400/60 block mb-1.5">Email</label>
               <input type="email" value={email} onChange={e => setEmail(e.target.value)}
                 placeholder="admin@hotellumiere.com"
-                className="w-full bg-charcoal-800 border border-charcoal-700 text-cream-50 font-body text-sm px-4 py-3 focus:outline-none focus:border-gold-400/50 placeholder:text-cream-200/20"
+                className="w-full bg-gray-800 border border-gray-700 text-white font-body text-sm px-4 py-3 focus:outline-none focus:border-blue-400/50 placeholder:text-gray-500/50"
                 required />
             </div>
             <div>
-              <label className="font-accent text-[9px] uppercase tracking-widest text-cream-200/40 block mb-1.5">Password</label>
+              <label className="font-accent text-[9px] uppercase tracking-widest text-gray-400/60 block mb-1.5">Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-charcoal-800 border border-charcoal-700 text-cream-50 font-body text-sm px-4 py-3 focus:outline-none focus:border-gold-400/50 placeholder:text-cream-200/20"
+                className="w-full bg-gray-800 border border-gray-700 text-white font-body text-sm px-4 py-3 focus:outline-none focus:border-blue-400/50 placeholder:text-gray-500/50"
                 required />
             </div>
 
@@ -163,7 +163,7 @@ export default function ManagementLoginPage() {
                 {Array.from({ length: MAX_ATTEMPTS }).map((_, i) => (
                   <div key={i}
                     className={`h-1 w-8 rounded-full transition-colors ${
-                      i < attemptsLeft ? 'bg-gold-400' : 'bg-red-500'
+                      i < attemptsLeft ? 'bg-blue-400' : 'bg-red-500'
                     }`}
                   />
                 ))}
@@ -171,13 +171,13 @@ export default function ManagementLoginPage() {
             )}
 
             <button type="submit" disabled={loading}
-              className="w-full bg-gold-500 hover:bg-gold-600 disabled:opacity-50 text-charcoal-900 font-accent text-[11px] uppercase tracking-widest py-4 transition-colors mt-2">
+              className="w-full bg-blue-500 hover:bg-blue-600 disabled:opacity-50 text-white font-accent text-[11px] uppercase tracking-widest py-4 transition-colors mt-2">
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
 
-            <p className="font-body text-xs text-cream-200/30 text-center">
+            <p className="font-body text-xs text-gray-400/40 text-center">
               Forgot your password?{' '}
-              <span className="text-gold-400/60">Contact your administrator</span>
+              <span className="text-blue-400/60">Contact your administrator</span>
             </p>
           </form>
         )}

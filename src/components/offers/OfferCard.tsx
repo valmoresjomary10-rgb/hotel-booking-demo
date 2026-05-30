@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Offer } from '@/types/offer'
 import { ArrowRight, Check, Calendar } from 'lucide-react'
+import Button from '@/components/ui/Button'
 
 interface OfferCardProps {
   offer: Offer
@@ -34,7 +35,7 @@ export default function OfferCard({ offer, featured = false }: OfferCardProps) {
               <p className="font-body text-cream-200/70 text-sm leading-relaxed">{offer.description}</p>
               <div className="flex items-center gap-4 mt-6">
                 {offer.discount > 0 && (
-                  <span className="font-body text-cream-200/40 line-through text-sm" aria-label={`Original price ₱${offer.originalPrice.toLocaleString()}`}>₱{offer.originalPrice.toLocaleString()}</span>
+                  <span className="font-body text-cream-200/40 line-through text-sm">₱{offer.originalPrice.toLocaleString()}</span>
                 )}
                 <span className="font-display text-3xl text-gold-400">₱{offer.packagePrice.toLocaleString()}</span>
                 {offer.discount > 0 && (
@@ -55,9 +56,9 @@ export default function OfferCard({ offer, featured = false }: OfferCardProps) {
                 </div>
               ))}
               <div className="pt-4">
-                <span className="inline-flex items-center gap-2 font-accent text-[10px] uppercase tracking-widest text-gold-400 group-hover:gap-3 transition-all">
-                  View Offer <ArrowRight size={12} />
-                </span>
+                <Button variant="outline" size="md">
+  View Offer <ArrowRight size={12} className="ml-2" />
+</Button>
               </div>
             </div>
           </div>
@@ -88,13 +89,13 @@ export default function OfferCard({ offer, featured = false }: OfferCardProps) {
         <div className="mt-4 pt-4 border-t border-cream-200 flex items-center justify-between">
           <div>
             {offer.discount > 0 && (
-              <span className="font-body text-charcoal-700/40 line-through text-xs block" aria-label={`Original price ₱${offer.originalPrice.toLocaleString()}`}>₱{offer.originalPrice.toLocaleString()}</span>
+              <span className="font-body text-charcoal-700/40 line-through text-xs block">₱{offer.originalPrice.toLocaleString()}</span>
             )}
             <span className="font-display text-2xl text-gold-500">₱{offer.packagePrice.toLocaleString()}</span>
           </div>
-          <span className="flex items-center gap-1 text-gold-500 text-xs font-accent uppercase tracking-wider group-hover:gap-2 transition-all">
-            View <ArrowRight size={12} />
-          </span>
+          <Button variant="outline" size="sm">
+  View Offer <ArrowRight size={12} className="ml-1" />
+</Button>
         </div>
       </div>
     </Link>

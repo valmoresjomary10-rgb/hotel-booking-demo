@@ -169,18 +169,14 @@ export default function BookingConfirmationCard({
         <div className="flex flex-col sm:flex-row gap-4">
           <Link
             href="/"
-            className="flex-1 flex items-center justify-center gap-2 border border-charcoal-700
-              hover:border-gold-500/40 text-charcoal-900 font-accent text-xs tracking-widest
-              uppercase py-4 px-6 transition-colors duration-200 rounded-sm"
+            className="flex-1 flex items-center justify-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-medium text-sm py-4 px-6 rounded-xl transition-all duration-200"
           >
             <Home className="h-4 w-4" />
             Back to Home
           </Link>
           <Link
             href="/rooms"
-            className="flex-1 flex items-center justify-center gap-2 bg-gold-500 hover:bg-gold-400
-              text-charcoal-900 font-accent text-xs tracking-widest uppercase py-4 px-6
-              transition-colors duration-200 rounded-sm"
+            className="flex-1 flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm py-4 px-6 rounded-xl transition-all duration-200"
           >
             Explore More Rooms
             <ArrowRight className="h-4 w-4" />

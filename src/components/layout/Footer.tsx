@@ -7,7 +7,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
+    <footer className="border-t border-gray-800" style={{ backgroundColor: '#000000' }}>
 
       {/* Main Footer */}
       <div className="section-wrapper py-16">
@@ -17,7 +17,7 @@ export default function Footer() {
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
               <span
-                className="text-xl font-bold text-gray-900"
+              className="text-xl font-bold text-blue-500"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 {siteConfig.name}

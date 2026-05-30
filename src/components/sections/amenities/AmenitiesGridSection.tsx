@@ -142,21 +142,21 @@ export default function AmenitiesGridSection() {
       {/* Lightbox */}
       {lightbox && currentAmenity && (
         <div
-  className="fixed inset-0 z-[999] flex items-center justify-center bg-charcoal-900/95 backdrop-blur-sm"
+        className="fixed inset-0 z-[999] flex items-center justify-center backdrop-blur-sm" style={{ backgroundColor: '#000000' }}
   onClick={closeLightbox}
 >
   {/* Close */}
   <button
     onClick={(e) => { e.stopPropagation(); closeLightbox() }}
-    className="absolute right-6 top-20 text-cream-50/60 hover:text-cream-50 transition-colors z-10 flex items-center gap-2 group"
+    className="absolute right-6 top-20 text-white/60 hover:text-white transition-colors z-10 flex items-center gap-2 group"
     aria-label="Close lightbox"
   >
     <X size={28} />
   </button>
           {/* Prev */}
           <button
-            onClick={prev}
-            className="absolute left-4 md:left-8 text-cream-50/60 hover:text-cream-50 transition-colors z-10"
+          onClick={(e) => { e.stopPropagation(); prev() }}
+            className="absolute left-4 md:left-8 text-white/60 hover:text-white transition-colors z-10"
             aria-label="Previous image"
           >
             <ChevronLeft size={40} />
@@ -201,8 +201,8 @@ export default function AmenitiesGridSection() {
 
           {/* Next */}
           <button
-            onClick={next}
-            className="absolute right-4 md:right-8 text-cream-50/60 hover:text-cream-50 transition-colors z-10"
+          onClick={(e) => { e.stopPropagation(); next() }}
+            className="absolute right-4 md:right-8 text-white/60 hover:text-white transition-colors z-10"
             aria-label="Next image"
           >
             <ChevronRight size={40} />

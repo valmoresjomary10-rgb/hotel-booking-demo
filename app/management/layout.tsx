@@ -3,7 +3,7 @@ import AdminTopbar from '@/components/management/AdminTopbar'
 
 export default function ManagementLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-screen bg-cream-100">
+    <div className="flex h-screen bg-gray-100">
       <AdminSidebar />
       <div className="flex flex-col flex-1 overflow-hidden">
         <AdminTopbar />
