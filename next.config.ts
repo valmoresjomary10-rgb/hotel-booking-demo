@@ -1,6 +1,11 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  experimental: {
+    turbo: {
+      enabled: false,
+    },
+  },
   // ── General ─────────────────────────────────────────────────────────────────
   compress: true,
   poweredByHeader: false,
