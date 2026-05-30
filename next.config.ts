@@ -2,9 +2,7 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   experimental: {
-    turbo: {
-      enabled: false,
-    },
+    middlewarePrefetch: 'strict',
   },
   // ── General ─────────────────────────────────────────────────────────────────
   compress: true,
